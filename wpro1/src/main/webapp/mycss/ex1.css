@@ -1,0 +1,89 @@
+@charset "UTF-8";
+/* 이게 주석 */
+#i2 {
+	background-color: yellow;
+	color: red;
+	font-size: 20px;
+}
+
+h1, h2 {
+	text-decoration: line-through;
+}
+
+table {
+	width: 70%;
+	margin-bottom: 10px;
+	border: 1px solid #ddd;
+}
+
+table tr td {
+	padding: 5px 10px;
+	border-top: 1px dotted rgb(0, 0, 255);
+	border-bottom: 3px double rgb(255, 0, 0);
+}
+
+input {
+	border: 5px solid; background-color: rgb(90%,60%,0%);
+}
+
+input.btnok {
+	border: 1px dotted; background-color: olive;
+}
+
+/* 동적 선택자 */
+input:focus {
+	background-color: #334455;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+a:visited {
+	color: red;
+}
+
+a:active {
+	color: yellow; font-family: 궁서;
+}
+
+a:hover {
+	font-size: 30px; cursor: crosshair;
+}
+
+i,strong {
+	color: #000; background-color: silver;
+}
+
+b{
+	font-size: 8px;
+}
+
+ div b{  /* div의 자손 b태 */
+	font-size: 16px;
+}
+
+div > b{  /* div의 직계 자식 b태 */
+	font-size: 24px;
+}
+
+div span b {
+	font-size: 32px;
+}
+
+div b#hi{
+	font-size: 40px;
+}
+
+div b.hello{
+	font-size: 46px;
+}
+
+div#pic{
+	height: 130px; background-color: yellow;
+	background-image: url('../image/snow.png');
+}
+
+img{
+	border: 10px dotted red;
+}

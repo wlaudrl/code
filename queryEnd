@@ -1,0 +1,1924 @@
+-- create database 데이터베이스명;
+-- use 데이터베이스명;
+
+-- table 작성
+-- CREATE TABLE 테이블명(칼럼명 타입 [기타...] , ...)
+-- 참고 : 자료 입력 시 한글이 깨질 경우
+--    CREATE TABLE 테이블명... )charset=utf8; 한다.
+CREATE TABLE test(NO INT,NAME VARCHAR(10),tel VARCHAR(15));
+SHOW TABLES;  -- 테이블 목록 보기
+DESCRIBE test; -- 테이블 구조 확인
+DESC test;
+
+DROP TABLE test; -- 테이블 삭제
+SHOW TABLES;
+
+CREATE TABLE test(NO INT PRIMARY KEY, 
+NAME VARCHAR(10) NOT NULL,
+tel VARCHAR(15),
+inwon INT,
+addr TEXT);
+
+DESC test;
+
+-- 자료추가
+-- insert into 테이블명(칼럼명,...) values(값1,...) 
+INSERT INTO test(NO,NAME,tel,inwon,addr) 
+VALUES(1,'인사과','111-1111',12,'역삼동123');
+
+INSERT INTO test VALUES(2,'영업과','111-2222',7,'역삼동222');
+
+INSERT INTO test(NO,NAME) VALUES(3,'자재과');
+
+INSERT INTO test(NAME,NO) VALUES('자재2과',4);
+
+SELECT * FROM test;
+
+-- insert 할 때 오류가 나는 경우
+-- INSERT INTO test(NO,NAME) VALUES(4,'자재3과');  -- pk 에러 : no 중복 불가
+-- INSERT INTO test(NO,NAME) VALUES(5,'자재3과','111-3333'); -- 칼럼수와 입력값 매칭 오류
+-- INSERT INTO test(NO,tel) VALUES(5,'111-3333'); -- name은 not null
+-- INSERT INTO test(NO,NAME) VALUES('오','자재3과'); -- NO은 숫자모양
+-- INSERT INTO test(NO,NAME) VALUES(5,'능력이 우수한 직원들만 근무할 수 있는 사랑받는 과'); --이름 값이 너무 큼
+
+SELECT * FROM test WHERE NO=3;  -- 다양한 조건에 의해 결과를 볼 수 있음
+
+-- 자료수정
+-- update 테이블명 set 칼럼명=값,... where 조건
+UPDATE test SET inwon=123 WHERE NO=1;
+UPDATE test SET inwon=5,tel='111-7788' WHERE NO=3;
+UPDATE test SET inwon=null WHERE NO=1;
+SELECT * FROM test;
+
+-- 자료 삭제
+-- delete from 테이블명 where 조건
+DELETE FROM test WHERE NO=1;  -- 부분적인 레코드 삭제 가능
+-- truncate table 테이블명    -- 구조만 남기고 모든 레코드 삭제
+truncate TABLE test;  -- transaction log를 만들기 때문에 속도 느림
+
+SELECT * FROM test;
+
+DROP TABLE test;  -- 테이블 제거
+SELECT * FROM test;
+
+SHOW DATABASES;
+USE mydb;
+SHOW TABLES;
+-- 무결성 제약조건 : 의미없는 자료 입력 방지가 목적
+-- domain 제약조건 : table 생성시 칼럼명, 성격, 크기, null 값 허용 여부
+-- 기본키 제약조건 : pk
+-- 사용자 정의 제약 조건 : check, unique, foreign key...
+
+-- domain 제약조건
+CREATE TABLE aa(bun INT, irum VARCHAR(5) NOT null, juso CHAR(50));
+DESC aa;
+INSERT INTO aa VALUES(1,'tom','seoul');
+INSERT INTO aa(bun, juso) VALUES('이','서울');  -- 에러
+DROP TABLE aa;
+
+-- 기본키 제약조건 : primary key - 해당 칼럼은 not null, unique, ascending sort
+-- 방법1
+CREATE TABLE aa(bun INT PRIMARY KEY, irum CHAR(10));
+DESC aa;
+INSERT INTO aa VALUES(1,'tom');
+INSERT INTO aa VALUES(1,'john'); -- err
+INSERT INTO aa(irum) VALUES('john'); -- err
+-- 제약 조건 확인
+SHOW INDEX FROM aa;  -- index 확인
+SELECT * FROM information_schema.table_constraints WHERE TABLE_NAME='aa';
+DROP TABLE aa;
+
+-- 방법2
+CREATE TABLE aa(bun INT, irum CHAR(10), CONSTRAINT aa_bun_pk PRIMARY KEY(bun));
+DESC aa;
+SELECT * FROM information_schema.table_constraints WHERE TABLE_NAME='aa';
+DROP TABLE aa;
+
+-- check 제약조건 : 입력되는 자료의 특정 칼럼값 검사
+CREATE TABLE aa(bun INT, irum CHAR(10), nai INT CHECK(nai >= 20));
+DESC aa;
+INSERT INTO aa VALUES(1,'tom',23);
+INSERT INTO aa VALUES(2,'tom2',13);  -- err
+-- 이미 만들어진 table에 제약조건 추가 - 아래 구문은 기존 자료 검사를 한다.
+ALTER TABLE aa ADD CONSTRAINT ck_myname CHECK(IRUM IN ('tom','james','oscar'));
+INSERT INTO aa VALUES(3,'james',33);
+SELECT * FROM aa;
+INSERT INTO aa VALUES(4,'page',33);  -- err
+DROP TABLE aa;
+
+-- unique : 입력되는 자료의 특정 칼럼값 중복 불가
+CREATE TABLE aa(bun INT, irum CHAR(10) UNIQUE);
+INSERT INTO aa VALUES(1,'james');
+INSERT INTO aa VALUES(2,'tom');
+INSERT INTO aa VALUES(3,'tom');  -- err
+DROP TABLE aa;
+
+-- default : 특정 칼럼에 초기값 부여. not null 방지가 목적
+-- 참고 : auto_increment 는 int type의 pk 칼럼에서 번호 자동 증가
+CREATE TABLE aa(bun INT PRIMARY KEY AUTO_INCREMENT,
+irum CHAR(10), juso CHAR(20) DEFAULT '역삼동');
+DESC aa;
+INSERT INTO aa VALUES(1,'james','서초1동');
+INSERT INTO aa(irum,juso) VALUES('john','서초2동');
+INSERT INTO aa(irum) VALUES('tom');
+SELECT * FROM aa;
+INSERT INTO aa VALUES(6,'oscar','서초3동'); -- AUTO_INCREMENT 번호 입력값 변경
+INSERT INTO aa(irum) VALUES('page');
+ALTER TABLE aa AUTO_INCREMENT=100;   -- 자동 입력값 변경
+INSERT INTO aa(irum) VALUES('can2');
+SELECT * FROM aa;
+DROP TABLE aa;
+
+CREATE TABLE aa(bun INT, irum CHAR(10), juso VARCHAR(50));
+-- 자료 입력 시 한글이 깨지는 경우에는 아래와 같이 적는다.
+-- CREATE TABLE aa(bun INT, irum CHAR(10), juso VARCHAR(50))CHARSET=UTF8;
+INSERT INTO aa(bun,irum) VALUES(1,'james');
+SELECT * FROM aa;
+ALTER TABLE aa ALTER COLUMN juso SET DEFAULT '역삼동';  
+-- aa 테이블 내의 juso 칼럼 구조 변경 
+
+INSERT INTO aa(bun,irum) VALUES(2,'tom');
+SELECT * FROM aa;
+DROP TABLE aa;
+
+-- foreign key(외부키, 참조키) : 다른 테이블의 칼럼 값을 참조
+-- foreign key의 대상은 primary key이어야 한다.
+-- on delete cascade : 
+--   부모 테이블의 행이 삭제되는 경우에 자식 테이블의 종속행도 함께 삭제됨
+CREATE TABLE jikwon(bun INT PRIMARY KEY, irum VARCHAR(10) NOT NULL,
+buser CHAR(10));
+INSERT INTO jikwon VALUES(1,'한송이','인사과');
+INSERT INTO jikwon VALUES(2,'신기해','인사과');
+INSERT INTO jikwon VALUES(3,'한송이','판매과');
+SELECT * FROM jikwon;
+
+CREATE TABLE gajok(CODE INT PRIMARY KEY, NAME VARCHAR(10),birth DATETIME, 
+jikwon_bun INT, FOREIGN KEY(jikwon_bun) REFERENCES jikwon(bun));
+
+DESC gajok;
+INSERT INTO gajok VALUES(100,'가나다','1977-07-17',1);
+INSERT INTO gajok VALUES(101,'한가해',NOW(),3);
+INSERT INTO gajok VALUES(102,'강나루','2000-07-17',2);
+INSERT INTO gajok VALUES(103,'가가멜','1999-07-27',1);
+
+INSERT INTO gajok VALUES(104,'공기밥','2020-07-27',7); -- err
+SELECT * FROM gajok;
+
+SELECT * FROM jikwon;
+DELETE FROM jikwon WHERE bun=3; -- err
+DELETE FROM gajok WHERE CODE=101;
+DELETE FROM jikwon WHERE bun=3; -- success
+
+DROP TABLE jikwon;  -- err
+DELETE FROM gajok;  -- gajok 테이블의 모든 레코드 삭제
+SELECT * FROM gajok;
+DROP TABLE jikwon;  -- err : jikwon을 참조하는 gajok 이 있는 한 drop 불가
+DROP TABLE gajok;
+DROP TABLE jikwon;  -- success
+SHOW TABLES;
+
+
+-- 제약 조건 연습문제
+CREATE TABLE professor(code INT PRIMARY KEY, NAME CHAR(10), 
+NUMBER INT CHECK(NUMBER >= 100 && NUMBER <= 500)); 
+-- check로 제약조건 추가
+
+SELECT * FROM professor;
+
+CREATE TABLE gwamok(CODE1 INT PRIMARY KEY AUTO_INCREMENT, 
+gwaname CHAR(20) UNIQUE, gyo CHAR(20), prof_code INT, 
+ FOREIGN KEY(prof_code) REFERENCES professor(CODE));   
+ -- code1 값이 자동적으로 1씩 증가
+ -- prof_code가 professor 테이블의 code를 참조한 foreign key
+
+SELECT * FROM gwamok;
+
+CREATE TABLE hakbun(CODE2 INT PRIMARY KEY, stu_name CHAR(10), 
+sugang_code INT, hak_num INT DEFAULT 1 CHECK(hak_num >= 1 && hak_num <= 4), 
+FOREIGN KEY(sugang_code) REFERENCES gwamok(CODE1)); 
+-- 초기값 1 설정.
+-- sugang_code가 gwamok 테이블의 code1을 참조한 foreign key
+
+select * FROM hakbun;
+
+SHOW TABLES;
+
+INSERT INTO professor VALUES(1,'원재',103);
+INSERT INTO professor(CODE,NAME) VALUES(2,'오옹');
+INSERT INTO professor VALUES(3,'우왕',213);
+INSERT INTO professor(NAME,NUMBER) VALUES('호옹',306); -- error : 기본키인 code값을 안넣었음
+INSERT INTO professor VALUES(4,'호우',600); -- error : number 값이 제약조건을 지키지 못함
+SELECT * FROM professor;
+
+INSERT INTO gwamok VALUES(1,'컴퓨터의 이해','시나공',1);
+INSERT INTO gwamok(gwaname,gyo,prof_code) VALUES('한국사','무슨책',2);
+INSERT INTO gwamok VALUES(3,'뭐배울래','무슨책',3);
+DELETE FROM gwamok WHERE prof_code=3; -- prof_code가 3인(교수 코드가 3인)레코드 삭제
+SELECT * FROM gwamok;
+
+INSERT INTO hakbun VALUES(1,'학생1',1,1);
+INSERT INTO hakbun(CODE2, stu_name) VALUES(2,'학생1'); 
+-- hak_num 값은 값을 따로 주지 않았기에  초기값 1
+
+INSERT INTO hakbun VALUES(3,'학생4',1,5); -- error : hak_num 값이 제약조건을 지키지 못함
+select * FROM hakbun;
+
+DROP TABLE hakbun;
+DROP TABLE gwamok;
+DROP TABLE professor;
+
+
+-- index (색인) : 검색 속도를 빠르게 하기 위해 해당 칼럼에 index를 부여
+-- index를 사용하는 경우 : 레코드 수가 많은 경우 (자주 사용하지 않으면 가치없다)
+-- index 사용을 자제해야 하는 경우
+-- 입력, 수정, 추가 등의 작업이 빈번한 테이블
+
+DROP TABLE aa;
+CREATE TABLE aa(bun INT PRIMARY KEY, irum CHAR(10), juso VARCHAR(20));
+INSERT INTO aa VALUES(1,'홍길동', '역삼동');
+INSERT INTO aa VALUES(3,'고길동', '서초동');
+INSERT INTO aa VALUES(2,'나길동', '신사동');
+
+SELECT * FROM aa;
+CREATE INDEX ind_irum ON aa(irum);
+ALTER TABLE aa ADD INDEX ind_juso (juso);
+
+SHOW INDEX FROM aa;
+
+explain SELECT * FROM aa WHERE irum='홍길동';  -- 실행 계획 확인
+SELECT * FROM aa WHERE irum='홍길동';
+SELECT * FROM aa WHERE juso='신사동';
+DROP INDEX ind_juso ON aa;
+DROP INDEX ind_irum ON aa;
+SHOW INDEX FROM aa;
+
+DROP TABLE aa;
+
+create TABLE aa(irum CHAR(10) PRIMARY KEY, juso VARCHAR(20) UNIQUE NOT NULL);
+SHOW INDEX FROM aa;
+INSERT INTO aa VALUES('mbc','aa');
+INSERT INTO aa VALUES('abc','cc');
+INSERT INTO aa VALUES('nbc','bb');
+SELECT * FROM aa;
+
+DROP TABLE aa;
+create TABLE aa(bun INT PRIMARY KEY, irum VARCHAR(10), juso VARCHAR(30));
+INSERT INTO aa VALUE(1,'mbc','seoul');
+
+ALTER TABLE aa ADD UNIQUE(irum); -- irum 칼럼에 색인 부여
+SELECT * FROM aa WHERE irum='mbc'; -- 색인 테이블로 자료 검색
+
+CREATE INDEX idx_irum_juso ON aa(irum, juso);  -- 복합 인덱스
+SELECT * FROM aa WHERE irum='mbc' AND juso = 'jeju'; 
+SHOW INDEX FROM aa;
+
+DROP TABLE aa;
+
+
+-- 테이블관련명령
+-- create table 테이블명...
+-- alter table 테이블명...
+-- drop table 테이블명...
+
+DROP TABLE aa;
+CREATE TABLE aa(irum CHAR(10), juso VARCHAR(20));  -- 테이블 구조 생성
+INSERT INTO aa VALUES('tom','seoul');
+INSERT INTO aa(irum) VALUES('john');
+
+SELECT * FROM aa;
+
+DROP TABLE kbs;
+ALTER TABLE aa RENAME kbs;  -- 테이블 이름 변경
+SELECT * FROM aa;
+SELECT * FROM kbs;
+
+-- 컬럼관련명령
+ALTER TABLE kbs ADD(job_id INT DEFAULT 100);  -- 컬럼 추가. 이전 자료에 모두 100으로 채워짐
+SELECT * FROM kbs;
+DESC kbs;
+
+ALTER TABLE kbs CHANGE job_id job_num INT;  -- 컬럼 이름 변경
+SELECT * FROM kbs;
+
+-- 컬럼 구조(type) 변경
+ALTER TABLE kbs MODIFY job_num VARCHAR(1);  -- err : 기존 자료 검사 
+ALTER TABLE kbs MODIFY job_num VARCHAR(5);  -- success
+DESC kbs;
+
+-- 컬럼 삭제
+ALTER TABLE kbs DROP COLUMN job_num;
+DESC kbs;
+SELECT * FROM kbs;
+
+
+-- select 연습 ------------------
+create table sangdata(
+code int primary key,
+sang varchar(20),
+su int,
+dan INT);
+
+insert into sangdata values(1,'장갑',3,10000);
+insert into sangdata values(2,'벙어리장갑',2,12000);
+insert into sangdata values(3,'가죽장갑',10,50000);
+insert into sangdata values(4,'가죽점퍼',5,650000);
+SELECT * FROM sangdata;
+
+
+create TABLE buser(
+buser_no int primary key, 
+buser_name varchar(10) not null,
+buser_loc varchar(10),
+buser_tel varchar(15));
+
+insert into buser values(10,'총무부','서울','02-100-1111');
+insert into buser values(20,'영업부','서울','02-100-2222');
+insert into buser values(30,'전산부','서울','02-100-3333');
+insert into buser values(40,'관리부','인천','032-200-4444');
+
+
+create table jikwon(
+jikwon_no int primary key,
+jikwon_name varchar(10) not null,
+buser_num int not null,
+jikwon_jik varchar(10) default '사원', 
+jikwon_pay int,
+jikwon_ibsail date,
+jikwon_gen varchar(4),
+jikwon_rating char(3),
+CONSTRAINT ck_jikwon_gen check(jikwon_gen='남' or jikwon_gen='여'));
+
+insert into jikwon values(1,'홍길동',10,'이사',9900,'2008-09-01','남','a');
+insert into jikwon values(2,'한송이',20,'부장',8800,'2010-01-03','여','b');
+insert into jikwon values(3,'이순신',20,'과장',7900,'2010-03-03','남','b');
+insert into jikwon values(4,'이미라',30,'대리',4500,'2014-01-04','여','b');
+insert into jikwon values(5,'이순라',20,'사원',3000,'2017-08-05','여','b');
+insert into jikwon values(6,'김이화',20,'사원',2950,'2019-08-05','여','c');
+insert into jikwon values(7,'김부만',40,'부장',8600,'2009-01-05','남','a');
+insert into jikwon values(8,'김기만',20,'과장',7800,'2011-01-03','남','a');
+insert into jikwon values(9,'채송화',30,'대리',5000,'2013-03-02','여','a');
+insert into jikwon values(10,'박치기',10,'사원',3700,'2016-11-02','남','a');
+insert into jikwon values(11,'김부해',30,'사원',3900,'2016-03-06','남','a');
+insert into jikwon values(12,'박별나',40,'과장',7200,'2011-03-05','여','b');
+insert into jikwon values(13,'박명화',10,'대리',4900,'2013-05-11','남','a');
+insert into jikwon values(14,'박궁화',40,'사원',3400,'2016-01-15','여','b');
+insert into jikwon values(15,'채미리',20,'사원',4000,'2016-11-03','여','a');
+insert INTO jikwon values(16,'이유가',20,'사원',3000,'2016-02-01','여','c');
+insert into jikwon values(17,'한국인',10,'부장',8000,'2006-01-13','남','c');
+insert into jikwon values(18,'이순기',30,'과장',7800,'2011-11-03','남','a');
+insert into jikwon values(19,'이유라',30,'대리',5500,'2014-03-04','여','a');
+insert into jikwon values(20,'김유라',20,'사원',2900,'2019-12-05','여','b');
+insert into jikwon values(21,'장비',20,'사원',2950,'2019-08-05','남','b');
+insert into jikwon values(22,'김기욱',40,'대리',5850,'2013-02-05','남','a');
+insert into jikwon values(23,'김기만',30,'과장',6600,'2015-01-09','남','a');
+insert into jikwon values(24,'유비',20,'대리',4500,'2014-03-02','남','b');
+insert into jikwon values(25,'박혁기',10,'사원',3800,'2016-11-02','남','a');
+insert into jikwon values(26,'김나라',10,'사원',3500,'2016-06-06','남','b');
+insert into jikwon values(27,'박하나',20,'과장',5900,'2012-06-05','여','c');
+insert into jikwon values(28,'박명화',20,'대리',5200,'2013-06-01','여','a');
+insert into jikwon values(29,'박가희',10,'사원',4100,'2016-08-05','여','a');
+insert into jikwon values(30,'최미숙',30,'사원',4000,'2015-08-03','여','b');
+
+
+create table gogek(
+gogek_no int primary key,
+gogek_name varchar(10) not null,
+gogek_tel varchar(20),
+gogek_jumin char(14),
+gogek_damsano int,
+CONSTRAINT FK_gogek_damsano foreign key(gogek_damsano) references jikwon(jikwon_no));
+
+insert into gogek values(1,'이나라','02-535-2580','850612-1156777',5);
+insert into gogek values(2,'김혜순','02-375-6946','700101-1054777',3);
+insert INTO gogek values(3,'최부자','02-692-8926','890305-1065777',3);
+insert into gogek values(4,'김해자','032-393-6277','770412-2028777',13);
+insert into gogek values(5,'차일호','02-294-2946','790509-1062777',2);
+insert into gogek values(6,'박상운','032-631-1204','790623-1023777',6);
+insert into gogek values(7,'이분','02-546-2372','880323-2558777',2);
+insert into gogek values(8,'신영래','031-948-0283','790908-1063777',5);
+insert into gogek values(9,'장도리','02-496-1204','870206-2063777',4);
+insert into gogek values(10,'강나루','032-341-2867','780301-1070777',12);
+insert into gogek values(11,'이영희','02-195-1764','810103-2070777',3);
+insert into gogek values(12,'이소리','02-296-1066','810609-2046777',9);
+insert into gogek values(13,'배용중','02-691-7692','820920-1052777',1);
+insert into gogek values(14,'김현주','031-167-1884','800128-2062777',11);
+insert into gogek values(15,'송운하','02-887-9344','830301-2013777',2);
+
+SELECT * FROM buser;
+SELECT * FROM jikwon;
+SELECT * FROM gogek;
+DESC buser;
+DESC jikwon;
+DESC gogek;
+
+
+-- select 형식
+-- SELECT [ distinct ] db명.소유자명.테이블명.칼럼명 [AS 별명] ...
+-- [ INTO 새테이블명 ]  
+-- [ FROM 테이블명 ] [ WHERE 조건 ]  
+-- [ GROUP BY 표현식 ]  
+-- [ HAVING 조건 ]  
+-- [ ORDER BY 기준칼럼 [ ASC | DESC ] ]  ...
+
+SELECT * FROM jikwon;  -- DB 서버로부터 모든 자료를 읽기
+
+SELECT jikwon_no,jikwon_name,buser_num FROM jikwon; -- 일부 칼럼만 읽기
+SELECT buser_num, jikwon_name,jikwon_no FROM jikwon; -- 칼럼 순서는 선택
+
+SELECT jikwon_no AS 사번,jikwon_name 이름,buser_num '부서 번호' 
+FROM jikwon;  -- 컬럼에 별명
+
+SELECT jikwon_name AS 이름,jikwon_pay AS 연봉, jikwon_pay * 0.02 AS 기부금
+FROM jikwon;
+
+SELECT CONCAT(jikwon_name, '님') AS 이름 FROM jikwon;  -- 문자열 더하기
+
+SELECT 10, '안녕', 12 + 4, 12 / 3 FROM DUAL;  -- dual은 가상의 테이블
+
+--  정렬 : order by 컬럼명. 기준 칼럼을 근거로 정렬됨. 그룹이 형성
+SELECT * FROM jikwon ORDER BY buser_num ASC;  -- 오름 차순 정렬
+SELECT * FROM jikwon ORDER BY buser_num;
+SELECT * FROM jikwon ORDER BY buser_num DESC; -- 내림 차순 정렬
+SELECT jikwon_no,jikwon_name,jikwon_pay FROM jikwon ORDER BY jikwon_pay DESC;
+SELECT * FROM jikwon ORDER BY jikwon_jik desc, buser_num ASC, ikwon_pay DESC;
+
+SELECT jikwon_no,jikwon_name,jikwon_pay,jikwon_pay * 0.5 AS tax 
+FROM jikwon ORDER BY tax DESC;
+
+SELECT distinct jikwon_jik FROM jikwon;  -- 중복 배제
+
+-- 연산자 : () > 산술 > 관계(비교) > is null, like, in > between, not > and > or
+SELECT * FROM jikwon WHERE jikwon_jik='대리';   -- where 구문으로 레코드 제한
+SELECT * FROM jikwon WHERE jikwon_jik!='대리';  -- 참고 : 조건은 긍정적일 때 속도 빠름
+SELECT * FROM jikwon WHERE jikwon_jik <> '대리';
+
+SELECT * FROM jikwon WHERE jikwon_no=3; 
+SELECT * FROM jikwon WHERE jikwon_no='3'; 
+SELECT * FROM jikwon WHERE jikwon_ibsail='2010-03-03'; 
+SELECT * FROM jikwon WHERE jikwon_ibsail='10-3-3'; 
+
+SELECT * FROM jikwon WHERE jikwon_no=5 or jikwon_no=10;
+
+SELECT * FROM jikwon 
+WHERE jikwon_jik='사원' and jikwon_gen='남' AND jikwon_pay <= 3500;
+
+SELECT * FROM jikwon 
+WHERE jikwon_jik='사원' AND (jikwon_gen='남' or jikwon_pay <= 3500);
+
+SELECT * FROM jikwon
+WHERE jikwon_no >= 5 AND jikwon_no <= 10;
+
+SELECT * FROM jikwon
+WHERE jikwon_no between 5 AND 10;
+
+SELECT * FROM jikwon
+WHERE jikwon_ibsail BETWEEN '2017-1-1' AND '2020-12-31';
+
+SELECT * FROM jikwon
+WHERE jikwon_no < 5 or jikwon_no > 10;
+
+SELECT * FROM jikwon
+WHERE jikwon_no not between 5 AND 10;  -- 부정적인 조건문은 비권장
+
+SELECT * FROM jikwon WHERE jikwon_pay >= 3000 + 1000 * 5;
+
+SELECT * FROM jikwon WHERE jikwon_name='홍길동';
+SELECT * FROM jikwon WHERE jikwon_name >='이';
+SELECT * FROM jikwon WHERE jikwon_name >='이순신';
+
+SELECT ASCII(0),ASCII('a'),ASCII('A'),ASCII('가'),ASCII('나') 
+FROM DUAL;   -- 내장함수 아스키코드값 출력
+
+SELECT * FROM jikwon WHERE jikwon_name BETWEEN '김' AND '최';
+
+-- in 조건 연산
+SELECT * FROM jikwon WHERE 
+jikwon_jik='대리' OR jikwon_jik='부장' OR jikwon_jik='이사';
+
+SELECT * FROM jikwon WHERE jikwon_jik IN('대리','부장','이사');
+
+SELECT * FROM jikwon WHERE buser_num IN(10, 30) ORDER BY buser_num;
+
+-- like 조건 연산 : %(0개 이상의 문자열), _(한 문자)
+SELECT * FROM jikwon WHERE jikwon_name LIKE '이%';
+SELECT * FROM jikwon WHERE jikwon_name LIKE '%라';
+SELECT * FROM jikwon WHERE jikwon_name LIKE '%순%';
+
+SELECT * FROM jikwon WHERE jikwon_name LIKE '이%라';
+SELECT * FROM jikwon WHERE jikwon_name LIKE '이_라';
+SELECT * FROM jikwon WHERE jikwon_name LIKE '__';
+
+SELECT * FROM jikwon WHERE 
+jikwon_name LIKE '이순%' OR jikwon_name LIKE '이미%';
+
+SELECT * FROM jikwon WHERE jikwon_pay LIKE '5%';
+SELECT * FROM jikwon WHERE jikwon_pay LIKE '5___';
+
+SELECT * FROM gogek WHERE gogek_tel LIKE '032%';
+
+SELECT * FROM gogek WHERE gogek_jumin LIKE '_______2%';
+SELECT * FROM gogek WHERE gogek_jumin LIKE '%-2%';
+
+SELECT * FROM jikwon;
+UPDATE jikwon SET jikwon_jik=NULL WHERE jikwon_no=5; -- auto commit
+
+SELECT * FROM jikwon WHERE jikwon_jik=NULL;  -- X
+SELECT * FROM jikwon WHERE jikwon_jik IS NULL;  -- O
+
+SELECT * FROM jikwon LIMIT 5;   -- 레코드 제한
+SELECT * FROM jikwon LIMIT 5, 3; -- limit 시작행, 갯수
+
+SELECT jikwon_no,jikwon_name, jikwon_jik FROM jikwon 
+WHERE jikwon_jik='사원' LIMIT 3;
+SELECT jikwon_no,jikwon_name, jikwon_jik FROM jikwon 
+WHERE jikwon_jik='사원' LIMIT 0, 5;
+
+SELECT jikwon_no AS 직원번호,jikwon_name AS 직원명, jikwon_jik 직급,
+jikwon_pay 연봉, jikwon_pay / 12 AS '특별 보너스',
+jikwon_ibsail 입사시기 
+FROM jikwon
+WHERE jikwon_jik IN('과장','부장','사원') AND
+((jikwon_pay >= 4000 and jikwon_ibsail BETWEEN '2015-1-1' AND '2020-12-31')
+OR
+(jikwon_name LIKE '이%' and jikwon_ibsail BETWEEN '2015-1-1' AND '2020-12-31'))
+ORDER BY jikwon_jik, jikwon_pay DESC LIMIT 3, 2;
+
+-- json data 형태로 출력
+-- Javascript 객체 문법을 따르는 문자 기반의 데이터 포맷입니다. 
+-- JSON이 Javascript 객체 문법과 매우 유사하지만 딱히 Javascript가 
+-- 아니더라도 JSON을 읽고 쓸 수 있는 기능이 다수의 프로그래밍 환경에서 제공됩니다.
+SELECT JSON_OBJECT('jikwon_no',jikwon_no,'jikwon_name',jikwon_name,
+'jikwon_pay',jikwon_pay) AS jsondata FROM jikwon WHERE jikwon_jik='대리';
+
+SELECT jikwon_no,jikwon_name,jikwon_pay FROM jikwon
+WHERE jikwon_jik='대리';
+
+
+-- 내장함수를 사용 - 효율성 향상
+
+-- 단일 행 함수 : 행 단위로 처리
+-- 문자 함수
+SELECT 'Hello', 'HELLO', 'hello' FROM DUAL;
+SELECT LOWER('Hello'), LOWER('HELLO'), 'hello' FROM DUAL;
+SELECT UPPER('Hello'), 'HELLO', UPPER('hello') FROM DUAL;
+
+SELECT CONCAT('Hello', 'World') AS abc FROM DUAL;
+SELECT concat(jikwon_name,'님') FROM jikwon WHERE jikwon_no <= 3;
+
+SELECT SUBSTR('Hello World',3) FROM DUAL;
+SELECT SUBSTR('Hello World',3, 6) FROM DUAL;
+SELECT SUBSTR('Hello World',-3, 2) FROM DUAL;
+SELECT SUBSTR(jikwon_name,2) FROM jikwon WHERE jikwon_no <= 3;
+
+SELECT LENGTH('Hello'), INSTR('Hello','e') FROM DUAL;
+-- INSTR : 찾고자 하는 문자열의 시작위치를 반환
+
+SELECT LPAD('Hello', 10, '*'), RPAD('Hello', 10, '*') FROM DUAL;
+
+SELECT TRIM(' aaa bbb  '),LTRIM(' aaa bbb  '), RTRIM(' aaa bbb  ') FROM DUAL;
+
+SELECT REPLACE('011.111.1111','.','-') FROM DUAL;
+
+-- 문)jikwon테이블에서 이름에 '이'가 포함된 직원이 있으면 '이' 부터 2글자 출력
+-- 출력 : 이순신 -> 순신,  김이순 -> 이순 
+SELECT INSTR(jikwon_name,'이') FROM jikwon WHERE jikwon_name LIKE '%이%';
+
+SELECT jikwon_name, substr(jikwon_name,INSTR(jikwon_name,'이'),2) 
+FROM jikwon
+WHERE jikwon_name LIKE '%이%';
+
+-- 숫자 함수
+SELECT ROUND(123.4567, 2), ROUND(123.4567), ROUND(123.4567, 0),
+ROUND(123.4567, -1), ROUND(123.4567, -2) FROM DUAL;  -- 반올림
+SELECT CEILING(4.3),CEILING(4.6) FROM DUAL;  -- 올림
+SELECT FLOOR(4.3),FLOOR(4.6) FROM DUAL;  -- 버림
+
+SELECT jikwon_name,jikwon_pay,ROUND(jikwon_pay * 0.025) AS tax FROM jikwon;
+SELECT jikwon_name,jikwon_pay,ROUND(jikwon_pay * 0.025, 1) AS tax FROM jikwon;
+
+SELECT TRUNCATE(45.678,0),TRUNCATE(45.678,1),TRUNCATE(45.678,-1) FROM DUAL; 
+
+SELECT MOD(15, 2), 15 % 2, 15 MOD 2 FROM DUAL; 
+SELECT GREATEST(3, 7, 12), LEAST(3, 7, 12), POW(3,2), SQRT(9) FROM DUAL;
+
+-- 날짜 함수
+select CURDATE(),CURDATE() + 0 FROM DUAL;
+SELECT NOW(), SYSDATE(), CURRENT_TIMESTAMP() FROM DUAL;
+
+SELECT ADDDATE('2024-4-23',5),ADDDATE('2024-4-23',-30),SUBDATE('2024-4-23',30) 
+FROM DUAL;
+
+SELECT DATE_ADD(NOW(),INTERVAL 5 MINUTE);
+SELECT DATE_ADD(NOW(),INTERVAL 5 DAY);
+SELECT DATE_ADD(NOW(),INTERVAL 5 MONTH);
+
+SELECT DATE_SUB(NOW(),INTERVAL 5 MINUTE);
+SELECT DATE_SUB(NOW(),INTERVAL 5 DAY);
+SELECT DATE_SUB(NOW(),INTERVAL 5 MONTH);
+SELECT DATE_SUB(NOW(),INTERVAL 5 YEAR);
+
+SELECT DATEDIFF(NOW(),'2000-5-5');  -- 결과는 날 수
+
+-- HOUR, SECOND, MINUTE, DAY, WEEK, MONTH, QUARTER, YEAR
+SELECT TIMESTAMPDIFF(+HOUR,'2022-1-1', '2024-5-1');
+SELECT TIMESTAMPDIFF(QUARTER,'2022-1-1', '2024-5-1');
+
+SELECT SYSDATE(), LAST_DAY(SYSDATE()), DAYOFYEAR(SYSDATE()),
+DAYOFWEEK(SYSDATE()) FROM DUAL;
+
+-- SQL에서 날짜와 관련된 함수를 사용할 때, 대부분의 SQL 시스템에서 
+-- 기준이 되는 날짜는 '1970년 1월 1일'입니다. 
+-- 이 날짜는 UNIX 시간의 시작점으로, 많은 데이터베이스 시스템들이 
+-- 이 날짜를 기준으로 시간을 계산합니다. 
+
+-- 형 변환 함수
+-- 자동 변환 (implicit conversion)
+SELECT jikwon_pay * 0.5, jikwon_pay * '0.5' FROM jikwon WHERE jikwon_no=1;
+
+-- 강제 변환 (explicit conversion)
+-- DATE_FORMAT : 날짜형 자료 서식을 이용해 문자열로 변환
+-- 서식 https://jinooh.tistory.com/17  참조
+SELECT NOW(), 
+DATE_FORMAT(NOW(), '%Y%m%d'), 
+DATE_FORMAT(NOW(), '%Y-%m-%d'),
+DATE_FORMAT(NOW(), '%Y년%m월%d일'),
+DATE_FORMAT(NOW(), '%H시%i분%S초');  -- 반환 값은 문자열
+
+SELECT NOW(), 
+DATE_FORMAT(NOW(), '%d'),
+DATE_FORMAT(NOW(), '%j'),
+DATE_FORMAT(NOW(), '%a'),
+DATE_FORMAT(NOW(), '%W');
+
+SELECT jikwon_name, jikwon_ibsail, DATE_FORMAT(jikwon_ibsail,'%W') 
+FROM jikwon;
+
+-- STR_TO_DATE : 문자형 자료를 날짜형으로 변환
+SELECT STR_TO_DATE('2024-4-23','%Y-%m-%d %H:%i:%S'), 
+STR_TO_DATE('2024-4-23','%Y-%m-%d'),
+ADDDATE(STR_TO_DATE('2024-4-23','%Y-%m-%d'), 10) ;
+
+SELECT CAST('2014/4/23' AS DATE), CAST('2014$4$23' AS DATE);  -- 문자열 -> 날짜
+
+-- 숫자 관련
+SELECT CAST(1234.567 AS INTEGER) AS a, CAST(1234.567 AS CHAR(3)) AS b;
+SELECT convert(1234.567, INTEGER);
+
+SELECT FORMAT(1234.567, 2),FORMAT(1234.567, 0);
+
+-- 기타 함수
+-- rank() : 순위를 결정
+SELECT jikwon_no,jikwon_name,jikwon_pay 
+FROM jikwon ORDER BY jikwon_pay;
+
+SELECT jikwon_no,jikwon_name,jikwon_pay,
+RANK() OVER(ORDER BY jikwon_pay) AS RANK1,
+dense_RANK() OVER(ORDER BY jikwon_pay) AS RANK2
+FROM jikwon;
+
+SELECT jikwon_no,jikwon_name,jikwon_pay,
+RANK() OVER(ORDER BY jikwon_pay desc) AS RANK1,
+dense_RANK() OVER(ORDER BY jikwon_pay desc) AS RANK2
+FROM jikwon;
+
+-- nvl(value1, value2) : value1이 null이면 value2를 취함
+SELECT jikwon_no,jikwon_name,jikwon_jik, nvl(jikwon_jik, '임시직') AS jik
+FROM jikwon;
+
+-- nvl2(value1, value2, value3) : value1이 null인지 평가.
+-- null이면 value3을 null이 아니면 value2를 취함
+SELECT jikwon_no,jikwon_name,jikwon_jik, 
+nvl2(jikwon_jik,'정규직', '임시직') AS jik
+FROM jikwon; 
+
+-- nullif(value1, value2) : 두 개의 값이 일치하면 null을, 아니면 value1을 취함
+SELECT NULLIF(LENGTH('abcd'),LENGTH('kbs'));
+SELECT NULLIF(LENGTH('abc'),LENGTH('kbs'));
+
+-- 연습 : 직급이 대리인 경우 null 출력
+SELECT jikwon_name,jikwon_jik,NULLIF(jikwon_jik,'대리') FROM jikwon;
+
+-- 조건 표현식(Conditional expression) -- case 구문
+-- 형식1) 
+-- case 표현식 when 비교값1 then 결과값1 when 비교값2 then 결과값2 ...
+-- ELSE 결과값n end AS 별명
+
+SELECT 
+case 10 / 5 when 5 then '안녕' 
+when 2 then '반가워' 
+ELSE '기타' 
+END AS 결과
+FROM DUAL;
+
+SELECT jikwon_name, jikwon_pay,
+case jikwon_pay when 3000 then '와우 삼천'
+when 3500 then '허걱 삼천오백'
+ELSE '기타연봉' END AS 연봉결과, jikwon_jik FROM jikwon;
+
+SELECT
+ jikwon_name, jikwon_pay, jikwon_jik,
+case jikwon_pay 
+when '이사' then jikwon_pay * 0.05
+when '부장' then jikwon_pay * 0.04
+when '과장' then jikwon_pay * 0.03
+else jikwon_pay * 0.02
+END donation FROM jikwon;
+
+-- 형식2) 
+-- case when 조건1 then 결과값1 when 조건2 then 결과값2 ...
+-- ELSE 결과값n end AS 별명
+SELECT jikwon_name, 
+case 
+when jikwon_gen='남' then 'M'
+when jikwon_gen='여' then 'F' 
+END AS jender 
+FROM jikwon;
+
+SELECT jikwon_name, jikwon_pay,
+case
+when jikwon_pay >= 7000 then '우수'
+when jikwon_pay >= 5000 then '보통'
+ELSE '저조'
+END AS result 
+FROM jikwon WHERE jikwon_jik IN('대리','과장') ORDER BY jikwon_pay desc;
+
+
+-- 문제1
+SELECT jikwon_name AS 직원명, TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) AS 근무년수,
+case
+when TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) >= 5 then '감사합니다'
+ELSE '열심히'
+END AS 표현 ,
+case
+when DATEDIFF(NOW(), jikwon_ibsail)/365 >= 5 then ROUND(jikwon_pay * 0.5)
+when DATEDIFF(NOW(), jikwon_ibsail)/365 >= 3 then round(jikwon_pay * 0.3)
+END AS 특별수당
+FROM jikwon WHERE DATE_FORMAT(jikwon_ibsail, '%Y') >= 2010;
+
+-- 문제2
+SELECT jikwon_name AS 직원명, jikwon_jik 직급, 
+DATE_FORMAT(jikwon_ibsail,'%Y.%m.%d')  입사년월일,
+case
+when TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) >= 8 then '왕고참'
+when TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) >= 5 then '고참'
+when TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) >= 3 then '보통'
+ELSE '일반' 
+END AS 구분, buser_name 부서
+FROM jikwon, buser;
+
+-- 문제3
+SELECT jikwon_no 사번, jikwon_name 직원명, buser_num 부서, jikwon_pay 연봉,
+case 
+when buser_num=10 then round(jikwon_pay + (jikwon_pay * 0.1))
+when buser_num=30 then round(jikwon_pay + (jikwon_pay * 0.2))
+ELSE jikwon_pay
+END AS 인상연봉, 
+case
+when TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) >= 8 then 'O'
+ELSE 'X'
+END AS 장기근속
+FROM jikwon;
+
+-- 복수 행 함수 (집계 함수) : 전체 자료를 그룹별로 구분해 결과를 얻기 위함
+SELECT SUM(jikwon_pay) AS 합, AVG(jikwon_pay) AS 평균 FROM jikwon;
+SELECT MAX(jikwon_pay) AS 최대값, MIN(jikwon_pay) AS 최소값 FROM jikwon;
+SELECT STDDEV(jikwon_pay) AS 표준편차 FROM jikwon;
+
+UPDATE jikwon SET jikwon_pay=null WHERE jikwon_no=5; 
+SELECT * FROM jikwon;
+
+-- 집계 함수는 null 인 자료는 연산에서 제외
+SELECT COUNT(jikwon_no), COUNT(jikwon_pay),COUNT(jikwon_jik), COUNT(*) 
+FROM jikwon;
+
+SELECT AVG(jikwon_pay), AVG(nvl(jikwon_pay, 0)) FROM jikwon;
+SELECT SUM(jikwon_pay) / 29, SUM(jikwon_pay) / 30 FROM jikwon;
+
+-- 과장은 몇명?
+SELECT COUNT(*) AS 인원수 FROM jikwon WHERE jikwon_jik='과장'; 
+
+-- 2010년 이전에 입사한 남자는 몇명?
+SELECT COUNT(*) AS 인원수 FROM jikwon
+WHERE jikwon_ibsail < '2010-1-1' AND jikwon_gen='남';
+
+-- 2015년 이후에 입사한 여직원의 연봉합, 연봉평균, 인원수?
+SELECT SUM(jikwon_pay) AS 연봉합, avg(jikwon_pay) AS 연봉평균,
+COUNT(*) AS 인원수 FROM jikwon
+WHERE jikwon_ibsail >= '2015-1-1' AND jikwon_gen='여';
+
+-- 그룹 함수 : group by 절 - 소계 출력 가능
+-- 형식 : select group컬럼명..., 계산함수... from 테이블명 where 조건
+--        group by group컬럼명... having 출력결과조건
+-- group by 절에 order by 할 수 없다. 단, 출력결과는 order by 가능
+
+-- 성별 연봉의 평균과 인원수를 출력
+SELECT AVG(jikwon_pay), COUNT(*) FROM jikwon WHERE jikwon_gen='남';
+SELECT AVG(jikwon_pay), COUNT(*) FROM jikwon WHERE jikwon_gen='여';
+SELECT * FROM jikwon ORDER BY jikwon_gen;
+
+SELECT jikwon_gen, AVG(jikwon_pay) 연봉평균, COUNT(*) 인원수 FROM jikwon
+GROUP BY jikwon_gen;
+
+-- 부서별 연봉합
+SELECT buser_num, SUM(jikwon_pay) FROM jikwon GROUP BY buser_num;
+
+-- 부서별 연봉합 : 연봉합이 35000 이상만 출력
+SELECT buser_num, SUM(jikwon_pay) FROM jikwon 
+GROUP BY buser_num HAVING SUM(jikwon_pay) >= 35000;
+
+-- 부서별 연봉합 : 여성만 출력
+SELECT buser_num, SUM(jikwon_pay) FROM jikwon 
+WHERE jikwon_gen='여'
+GROUP BY buser_num;
+
+-- 부서별 연봉합 : 연봉합이 15000 이상인 여성만 출력
+SELECT buser_num, SUM(jikwon_pay) FROM jikwon 
+WHERE jikwon_gen='여'
+GROUP BY buser_num HAVING SUM(jikwon_pay) >= 15000;
+
+-- 주의  : group by 절에 order by 할 수 없다. 단, 출력결과는 order by 가능
+SELECT buser_num, SUM(jikwon_pay) FROM jikwon ORDER BY buser_num DESC
+GROUP BY buser_num;
+
+SELECT buser_num, SUM(jikwon_pay) FROM jikwon 
+GROUP BY buser_num
+ORDER BY SUM(jikwon_pay) DESC;  -- GROUP BY에 대한 출력결과는 order by 가능 
+
+SELECT buser_num, SUM(jikwon_pay) AS hap FROM jikwon 
+GROUP BY buser_num
+ORDER BY hap DESC;
+
+
+-- 문1) 직급별 급여의 평균 (NULL인 직급 제외)
+SELECT jikwon_jik 직급,  AVG(jikwon_pay) 급여평균 FROM jikwon
+WHERE jikwon_jik IS NOT null
+GROUP BY jikwon_jik;
+
+-- 문2) 부장,과장에 대해 직급별 급여의 총합
+SELECT jikwon_jik 직급, SUM(jikwon_pay) 급여합 FROM jikwon
+WHERE jikwon_jik='부장' or jikwon_jik = '과장'
+GROUP BY jikwon_jik;
+
+-- 문3) 2015년 이전에 입사한 자료 중 년도별 직원수 출력
+SELECT date_format(jikwon_ibsail, '%Y') as 년도,  COUNT(*) 인원수
+FROM jikwon
+WHERE jikwon_ibsail < '2015-1-1'
+GROUP BY 년도;
+
+-- 문4) 직급별 성별 인원수, 급여합 출력 (NULL인 직급은 임시직으로 표현)
+SELECT nvl(jikwon_jik, '임시직') 직급 ,jikwon_gen 성별, COUNT(*) 인원수, 
+SUM(jikwon_pay) 급여합 FROM jikwon
+GROUP BY jikwon_jik,jikwon_gen ORDER by jikwon_jik;
+
+-- 문5) 부서번호 10,20에 대한 부서별 급여 합 출력
+select buser_num 부서번호, SUM(jikwon_pay) AS 급여합 FROM jikwon
+WHERE buser_num IN(10,20)
+GROUP BY buser_num;
+
+-- 문6)급여의 총합이 7000 이상인 직급 출력(NULL인 직급은 임시직으로 표현)
+SELECT nvl(jikwon_jik,'임시직') 직급 , SUM(jikwon_pay) 
+FROM jikwon
+GROUP BY jikwon_jik HAVING SUM(jikwon_pay) >= 7000 ;
+
+-- 문7)직급별 인원수, 급여합계를 구하되 인원수가 3명 이상인 직급만 출력
+--     (NULL인 직급은 임시직으로 표현)
+SELECT nvl(jikwon_jik,'임시직') 직급, COUNT(*) 인원수, 
+SUM(jikwon_pay) 급여합 FROM jikwon
+GROUP BY jikwon_jik HAVING COUNT(*) >= 3;
+
+
+
+-- join : 하나 이상의 테이블에서 원하는 데이터 추출
+
+-- buser 테이블 행 추가
+SELECT * FROM buser;
+INSERT INTO buser(buser_no,buser_name) VALUES(50,'전략기획부');
+
+-- jikwon 테이블 특정 행 부서번호에 null 입력
+SELECT * FROM jikwon;
+DESC jikwon;
+ALTER TABLE jikwon MODIFY buser_num INT NULL;
+UPDATE jikwon SET buser_num=NULL WHERE jikwon_no=5;
+SELECT * FROM jikwon;
+-- ---------------------------------
+
+SELECT mydb.jikwon.jikwon_name FROM jikwon;
+SELECT jikwon_name FROM jikwon;
+SELECT jiktab.jikwon_name FROM jikwon AS jiktab;
+
+-- cross join : 한쪽 테이블의 모든 행과 다른 쪽 테이블의 모든 행을 조인하는 기능이다.
+SELECT jikwon_name, buser_name FROM jikwon, buser;
+SELECT jikwon_name, buser_name FROM jikwon CROSS join buser;
+
+-- cross join 중에서 self join : 자신이 자신과 조인한다는 의미로, 1개의 테이블을 사용한다.
+SELECT a.jikwon_name, b.jikwon_name FROM jikwon a, jikwon b;
+
+-- EQUI join : 조인 조건식에 '='를 사용한다.
+SELECT jikwon_name, buser_name FROM jikwon, buser 
+WHERE jikwon.buser_num = buser.buser_no;
+
+-- NON-EQUI join : 조인 조건식에 '=' 이외의 관계연산자를 사용한다.
+CREATE TABLE paygrade(grade INT PRIMARY KEY, lpay INT, hpay INT);
+INSERT INTO paygrade VALUES(1, 0, 1999);
+INSERT INTO paygrade VALUES(2, 2000, 2999);
+INSERT INTO paygrade VALUES(3, 3000, 3999);
+INSERT INTO paygrade VALUES(4, 4000, 4999);
+INSERT INTO paygrade VALUES(5, 5000, 9999);
+SELECT * FROM paygrade;
+
+SELECT * FROM jikwon;
+
+SELECT jiktab.jikwon_name,jiktab.jikwon_pay,paytab.grade 
+FROM jikwon as jiktab, paygrade as paytab
+WHERE jiktab.jikwon_pay >= paytab.lpay AND jiktab.jikwon_pay <= paytab.hpay;
+
+-- inner join : 두 테이블을 조인할 때, 두 테이블에 모두 지정한 열의 데이터가 있어야 한다.
+SELECT jikwon_no, jikwon_name, buser_name FROM jikwon, buser
+WHERE buser_num = buser_no;  -- oracle에서 주로 사용
+
+SELECT jikwon.jikwon_no, jikwon.jikwon_name, buser.buser_name 
+FROM jikwon, buser
+WHERE jikwon.buser_num = buser.buser_no;
+
+SELECT jtab.jikwon_no, jtab.jikwon_name, butab.buser_name 
+FROM jikwon jtab, buser butab
+WHERE jtab.buser_num = butab.buser_no;
+
+SELECT jikwon_no, jikwon_name, buser_name FROM jikwon, buser
+WHERE buser_num = buser_no AND jikwon_gen='남';
+
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon INNER join buser  
+ON buser_num = buser_no;  -- ANSI SQL
+
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon INNER join buser  
+ON buser_num = buser_no
+WHERE jikwon_gen='남';
+
+-- outer join : 두 테이블을 조인할 때, 1개의 테이블에만 데이터가 있어도 결과가 나온다.
+-- left outer join
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon, buser
+WHERE jikwon.buser_num = buser.buser_no(+);  -- oracle 방법 : MariaDB X
+
+-- right outer join
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon, buser
+WHERE jikwon.buser_num(+) = buser_no;   -- oracle 방법 : MariaDB X
+ 
+-- left outer join
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon LEFT OUTER JOIN buser
+ON jikwon.buser_num = buser.buser_no;   -- ANSI SQL
+
+-- right outer join
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon RIGHT OUTER JOIN buser
+ON jikwon.buser_num = buser.buser_no;   -- ANSI SQL
+
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon full OUTER JOIN buser
+ON jikwon.buser_num = buser.buser_no;   -- oracle 방법 : MariaDB X
+
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon left OUTER JOIN buser
+ON jikwon.buser_num = buser.buser_no
+UNION 
+SELECT jikwon_no, jikwon_name, buser_name 
+FROM jikwon right OUTER JOIN buser
+ON jikwon.buser_num = buser.buser_no;   -- MariaDB의 full OUTER JOIN 처리
+
+
+SELECT jikwon_no, jikwon_name, buser_name  
+FROM jikwon INNER JOIN buser
+ON jikwon.buser_num = buser.buser_no
+WHERE jikwon_name LIKE '김%';
+
+SELECT SUM(jikwon_pay) AS hap, COUNT(*) AS count  
+FROM jikwon INNER JOIN buser
+ON jikwon.buser_num = buser.buser_no
+WHERE jikwon_name LIKE '김%';
+
+SELECT * FROM gogek;
+
+
+-- 문제 1번)
+-- 직급이 '사원' 인 직원이 관리하는 고객자료 출력
+-- 출력 ==>  사번   직원명   직급      고객명    고객전화    고객성별
+--            3     한국인   사원       우주인    123-4567       남
+SELECT jikwon_no 사번, jikwon_name 직원명, jikwon_jik 직급,
+gogek_name 고객명, gogek_tel 고객전화,
+case
+when gogek_jumin LIKE '%-1%' then '남'
+when gogek_jumin LIKE '%-2%' then '여'
+END AS 고객성별
+FROM jikwon LEFT outer JOIN gogek
+ON jikwon.jikwon_no = gogek.gogek_damsano
+WHERE jikwon_jik = '사원';
+
+SELECT * FROM gogek WHERE gogek_name IN('박상운','김현주');
+
+-- 문제 2번)
+-- 직원별 고객 확보 수  -- GROUP BY 사용
+-- 모든 직원 참여
+SELECT jikwon_name 직원명, COUNT(gogek_no) 고객확보수
+FROM jikwon LEFT OUTER JOIN gogek
+ON jikwon.jikwon_no = gogek.gogek_damsano
+GROUP BY jikwon_no ORDER by jikwon_jik;
+
+-- 문제 3번)
+-- 고객이 담당직원의 자료를 보고 싶을 때 즉, 고객명을 입력하면,  담당직원 자료 출력  
+--        :    ~ WHERE GOGEK_NAME='강나루'
+-- 출력 ==>  직원명       직급
+--           한국인       사원
+
+SELECT jikwon_name 직원명, jikwon_jik 직급
+FROM jikwon INNER JOIN gogek
+ON jikwon.jikwon_no = gogek.gogek_damsano 
+WHERE gogek_name = '강나루';
+
+-- 문제 4번)
+-- 직원명을 입력하면 관리고객 자료 출력
+--       : ~ WHERE JIKWON_NAME='이순신'
+-- 출력 ==> 고객명   고객전화       주민번호       나이
+--          강나루   123-4567    700512-1234567     38
+
+SELECT gogek_name 고객명, gogek_tel 고객전화, gogek_jumIn 주민번호,
+TIMESTAMPDIFF(YEAR, STR_TO_DATE(SUBSTR(gogek_jumIn, 1, 6),'%y%m%d'), NOW()) AS 나이
+FROM jikwon INNER JOIN gogek
+ON jikwon.jikwon_no = gogek.gogek_damsano 
+WHERE jikwon_name = '이순신';
+
+-- 세 개의 테이블로 조인
+SELECT jikwon_name, buser_name, gogek_name 
+FROM jikwon,buser,gogek
+WHERE jikwon.buser_num=buser.buser_no AND 
+jikwon.jikwon_no=gogek.gogek_damsano;
+
+SELECT jikwon_name, buser_name, gogek_name 
+FROM jikwon
+INNER JOIN buser ON jikwon.buser_num=buser.buser_no
+INNER JOIN gogek ON jikwon.jikwon_no=gogek.gogek_damsano;
+
+
+-- 문1) 총무부에서 관리하는 고객수 출력 (고객 30살 이상만 작업에 참여)
+SELECT buser_name AS 부서명, COUNT(*) AS 고객수
+FROM jikwon AS j
+INNER JOIN buser AS b ON j.buser_num = b.buser_no
+INNER JOIN gogek AS g ON j.jikwon_no = g.gogek_damsano
+WHERE buser_name = '총무부'
+AND TIMESTAMPDIFF(YEAR, STR_TO_DATE(SUBSTR(gogek_jumin, 1, 6), '%y%m%d'), NOW()) >= 30
+GROUP BY buser_name;
+
+-- 문2) 부서명별 고객 인원수 (부서가 없으면 "무소속")
+SELECT NVL(buser_name, '무소속') AS 부서명, COUNT(*) AS 고객수
+FROM jikwon AS j
+LEFT OUTER JOIN buser AS b ON j.buser_num = b.buser_no
+INNER JOIN gogek AS g ON j.jikwon_no = g.gogek_damsano
+GROUP BY 부서명;
+
+-- 문3) 고객이 담당직원의 자료를 보고 싶을 때 즉, 고객명을 입력하면  담당직원 자료 출력  
+SELECT jikwon_name AS 직원명,
+jikwon_jik AS 직급,
+buser_name AS 부서명,
+buser_tel AS 부서전화,
+jikwon_gen AS 성별
+FROM jikwon AS j
+INNER JOIN buser AS b ON j.buser_num = b.buser_no
+INNER JOIN gogek AS g ON j.jikwon_no = g.gogek_damsano
+WHERE gogek_name = '강나루';
+
+-- 문4) 부서와 직원명을 입력하면 관리고객 자료 출력
+SELECT gogek_name AS 고객명, gogek_tel AS 고객전화,
+CASE SUBSTR(gogek_jumin, 8, 1)
+WHEN 1 THEN '남'
+WHEN 2 THEN '여'
+END AS 성별
+FROM jikwon AS j
+INNER JOIN buser AS b ON j.buser_num = b.buser_no
+INNER JOIN gogek AS g ON j.jikwon_no = g.gogek_damsano
+WHERE buser_name = '영업부' AND jikwon_name = '이순신';
+
+-- union : 구조가 일치하는 두 개 이상의 테이블 자료 합쳐보기
+-- 원래 테이블은 그대로 유지 된다.
+CREATE TABLE sangpum1(bun INT, pummok VARCHAR(20) NOT NULL);
+INSERT INTO sangpum1 VALUES(1,'사과');
+INSERT INTO sangpum1 VALUES(2,'오렌지');
+INSERT INTO sangpum1 VALUES(3,'바나나');
+SELECT * FROM sangpum1;
+
+CREATE TABLE sangpum2(num INT, sangirum VARCHAR(20) NOT NULL);
+INSERT INTO sangpum2 VALUES(10,'토마토');
+INSERT INTO sangpum2 VALUES(11,'참외');
+INSERT INTO sangpum2 VALUES(12,'딸기');
+INSERT INTO sangpum2 VALUES(13,'오이');
+INSERT INTO sangpum2 VALUES(14,'수박');
+SELECT * FROM sangpum2;
+
+SELECT bun AS 번호,pummok AS 상품명 FROM sangpum1
+UNION
+SELECT num,sangirum FROM sangpum2;
+
+-- subquery : SQL명령문에 포함된 SELECT 명령문이다.
+-- 이때 서브쿼리는 메인쿼리보다 먼저 실행 될 수 있으며, 서브쿼리가 위치한 곳에 먼저 실행 될 수 있다.
+-- 다음은 서브쿼리를 분류한 것이다.
+-- >> 반환 값에 따른 서브쿼리
+-- - Single row Subquery      : 서브쿼리 결과가 단일 행
+--   * 단일 행 비교 연산자에는 =, <, <=, > , >=, <>을 사용한다.
+-- - Multiple row Subquery    : 서브쿼리 결과가 여러 행
+-- * 다중 행 비교 연산자에는 IN, ALL, ANY, SOME, EXISTS가 있다.
+-- 서브쿼리는 괄호() 로 감싸져서 표현 된다.
+-- 서브쿼리를 포함하고 있는 쿼리를 외부쿼리(outer query)라고 부르며, 서브쿼리는 내부쿼리(inner query)라고도 부른다.
+
+SELECT * FROM jikwon;
+-- 박별나 직원과 직급이 직원 출력
+SELECT jikwon_jik FROM jikwon WHERE jikwon_name='박별나'; -- 문1 : 과장
+SELECT * FROM jikwon WHERE jikwon_jik='과장';  -- 문2 : 조건에 맞는 결과 출력
+-- 문1의 결과를 근거로 문2를 실행함
+
+-- subquery를 사용 - where 조건
+SELECT * FROM jikwon WHERE jikwon_jik=
+(SELECT jikwon_jik FROM jikwon WHERE jikwon_name='박별나');
+
+-- 직급이 대리 중 가장 먼저 입사한 직원은?
+SELECT MIN(jikwon_ibsail) FROM jikwon WHERE jikwon_jik='대리'; -- 2013-02-05
+SELECT * FROM jikwon WHERE jikwon_ibsail='2013-02-05';
+
+SELECT * FROM jikwon WHERE jikwon_ibsail=
+(SELECT MIN(jikwon_ibsail) FROM jikwon WHERE jikwon_jik='대리');  -- X
+
+SELECT * FROM jikwon WHERE jikwon_jik='대리' and jikwon_ibsail=
+(SELECT MIN(jikwon_ibsail) FROM jikwon WHERE jikwon_jik='대리');  -- O
+
+-- 인천에 근무하는 직원 출력
+SELECT * FROM jikwon WHERE buser_num=(SELECT buser_no FROM buser
+WHERE buser_loc='인천');
+
+-- 인천 이외의 지역에 근무하는 직원 출력
+SELECT * FROM jikwon WHERE buser_num in(SELECT buser_no FROM buser
+WHERE not buser_loc='인천');
+
+SELECT * FROM jikwon WHERE buser_num <> (SELECT buser_no FROM buser
+WHERE buser_loc='인천');
+
+SELECT * FROM gogek;
+-- 김혜순 고객과 단당 직원이 같은 고객을 출력
+SELECT * FROM gogek WHERE gogek_damsano=(SELECT gogek_damsano 
+from gogek WHERE gogek_name='김혜순');
+
+-- 고객 중 박상운과 나이가 같은 모든 고객을 출력
+SELECT SUBSTRING(gogek_jumin,1,2) FROM gogek;
+
+SELECT * FROM gogek WHERE SUBSTRING(gogek_jumin,1,2)=(SELECT 
+SUBSTRING(gogek_jumin,1,2) FROM gogek WHERE gogek_name='박상운');
+
+
+-- SubQuery 연습문제
+
+-- 문1) 2010년 이후에 입사한 남자 중 급여를 가장 많이 받는 직원은? 
+SELECT * FROM jikwon 
+WHERE jikwon_ibsail >= '2010-01-01' 
+and jikwon_gen = '남'
+AND jikwon_pay = 
+(SELECT MAX(jikwon_pay) FROM jikwon 
+WHERE jikwon_ibsail >= '2010-01-01' and jikwon_gen = '남');
+
+-- 문2) 평균급여보다 급여를 많이 받는 직원은? 
+SELECT * FROM jikwon WHERE jikwon_pay > (SELECT AVG(jikwon_pay) FROM jikwon);
+
+-- 문3) '이미라' 직원의 입사 이후에 입사한 직원은? 
+SELECT * FROM jikwon WHERE jikwon_name = '이미라'; -- 2014-01-04
+
+SELECT * FROM jikwon WHERE jikwon_ibsail >= (
+SELECT jikwon_ibsail FROM jikwon WHERE jikwon_name = '이미라');
+
+-- 문4) 2010~ 2015년 사이에 입사한 총무부(10), 영업부(20), 전산부(30) 직원중 급여가 가장 적은 사람은? (직급이 null 인 자료는 작업에서 제외) -- o
+SELECT * FROM jikwon 
+WHERE jikwon_ibsail BETWEEN '2010-01-01' AND '2015-12-31'
+AND buser_num IN(10,20,30)
+AND jikwon_pay = (
+SELECT MIN(jikwon_pay) FROM jikwon 
+where jikwon_ibsail >= '2010-01-01' AND jikwon_ibsail <'2016-01-01' AND 
+buser_num IN(SELECT buser_no FROM buser 
+WHERE buser_name IN('총무부','영업부','전산부')) AND jikwon_jik IS NOT NULL);  
+
+
+-- 문5) 한송이, 이순신과 직급이 같은 사람은 누구인가? 
+SELECT * FROM jikwon WHERE jikwon_name = '한송이' or jikwon_name = '이순신'; 
+
+SELECT * FROM jikwon 
+WHERE jikwon_jik IN(SELECT jikwon_jik FROM jikwon 
+WHERE jikwon_name IN('한송이','이순신'));
+
+ 
+-- 문6) 과장 중에서 최대급여, 최소급여를 받는 사람은? 
+SELECT * FROM jikwon 
+WHERE jikwon_jik = '과장' AND 
+(jikwon_pay = (SELECT MAX(jikwon_pay) FROM jikwon WHERE jikwon_jik = '과장')
+OR 
+jikwon_pay = (SELECT MIN(jikwon_pay) FROM jikwon WHERE jikwon_jik = '과장'));
+
+-- 문7) 10번 부서의 최소급여보다 많은 사람은?  
+SELECT * FROM jikwon 
+WHERE jikwon_pay > (SELECT MIN(jikwon_pay) FROM jikwon WHERE buser_num = 10);
+
+-- 문8) 30번 부서의 평균급여보다 급여가 많은 '대리'는 몇명인가? 
+SELECT * FROM jikwon
+WHERE jikwon_jik='대리' AND 
+jikwon_pay > (SELECT AVG(jikwon_pay) FROM jikwon WHERE buser_num = '30');
+
+-- 문9) 고객을 확보하고 있는 직원들의 이름, 직급, 부서명을 입사일 별로 출력하라.
+SELECT jikwon_name AS 직원명, jikwon_jik AS 직급, buser_num AS 부서명 , jikwon_ibsail AS 입사일 
+FROM jikwon
+WHERE jikwon_no IN (SELECT jikwon_no FROM jikwon 
+INNER JOIN gogek ON jikwon.jikwon_no = gogek.gogek_damsano
+GROUP BY jikwon_no) ORDER BY jikwon_ibsail;
+
+-- 문10) 이순신과 같은 부서에 근무하는 직원과 해당 직원이 관리하는 고객 출력
+-- ( 고객은 나이가 30이하면 '청년', 50이하면 '중년', 그외는 '노년'으로 표시하고, 고객 연장자부터 출력)
+SELECT jikwon_name AS 직원명, buser_name AS 부서명, buser_tel AS 부서전화, 
+jikwon_jik AS 직급, gogek_name AS 고객명, gogek_tel AS 고객전화, 
+case
+when TIMESTAMPDIFF(year,CAST(SUBSTR(gogek_jumin,1,6) AS DATE), NOW()) <= 30 then '청년'
+when TIMESTAMPDIFF(year,CAST(SUBSTR(gogek_jumin,1,6) AS DATE), NOW()) <= 50 then '중년'
+ELSE '노년'
+END AS 고객구분
+FROM jikwon
+INNER JOIN buser on jikwon.buser_num = buser.buser_no
+INNER JOIN gogek on jikwon.jikwon_no = gogek.gogek_damsano
+WHERE buser_num = (SELECT buser_num FROM jikwon where jikwon_name = '이순신')
+ORDER BY gogek_jumin;
+
+-- query문은 동일한 결과를 다른 방법으로 처리 가능
+-- 총무부에 근무하는 직원들이 관리하는 고객 출력
+-- subquery
+SELECT gogek_no,gogek_name,gogek_tel FROM gogek
+WHERE gogek_damsano IN(SELECT jikwon_no FROM jikwon WHERE buser_num=(SELECT
+buser_no FROM buser WHERE buser_name='총무부'));
+
+-- join
+SELECT gogek_no,gogek_name,gogek_tel FROM gogek
+INNER JOIN jikwon on jikwon.jikwon_no = gogek.gogek_damsano
+INNER JOIN buser ON jikwon.buser_num = buser.buser_no
+WHERE buser_name='총무부';
+
+-- ALL, ANY : null 인 자료는 제외하고 작업함
+-- <ANY : subquery의 반환값 중 최대값 보다 작은 ...
+-- >ANY : subquery의 반환값 중 최소값 보다 큰 ...
+-- <ALL : subquery의 반환값 중 최소값 보다 작은 ...
+-- >ALL : subquery의 반환값 중 최대값 보다 큰 ... 
+
+-- 직급 대리의 최대값 보다 작은 연봉을 받는 직원 출력
+SELECT jikwon_no,jikwon_name,jikwon_pay FROM jikwon
+WHERE jikwon_pay <ANY (SELECT jikwon_pay FROM jikwon WHERE jikwon_jik='대리');
+
+-- 30번 부서의 최대 연봉자 이상 연봉을 많이 받는 직원은?
+SELECT jikwon_no,jikwon_name,jikwon_pay FROM jikwon
+WHERE jikwon_pay >=ALL (SELECT jikwon_pay FROM jikwon WHERE buser_num=30);
+
+-- 30번 부서의 최소 연봉자 보다 연봉을 많이 받는 직원은?
+SELECT jikwon_no,jikwon_name,jikwon_pay FROM jikwon
+WHERE jikwon_pay >ANY (SELECT jikwon_pay FROM jikwon WHERE buser_num=30);
+
+
+-- from 절에 subquery 사용
+-- 전체 평균 연봉과 최대 연봉 사이의 연봉을 받는 직원 출력
+SELECT jiktab.jikwon_no,jiktab.jikwon_name,jiktab.jikwon_pay 
+FROM jikwon jiktab,(SELECT AVG(jikwon_pay) avgs,MAX(jikwon_pay) maxs 
+FROM jikwon) amtab WHERE jiktab.jikwon_pay BETWEEN amtab.avgs and amtab.maxs;
+
+-- 각 부서별 최대 연봉자 출력
+SELECT jiktab.jikwon_no,jiktab.jikwon_name,jiktab.jikwon_pay, jiktab.buser_num 
+FROM jikwon jiktab,(SELECT buser_num, MAX(jikwon_pay) maxpay FROM jikwon 
+GROUP BY buser_num) maxtab WHERE jiktab.buser_num=maxtab.buser_num AND
+jiktab.jikwon_pay = maxtab.maxpay;
+
+-- group by 내 having 절에 subquery 사용
+-- 부서별 평균 연봉 중에서 30번 부서의 평균 연봉보다 큰 부서 출력
+SELECT buser_num, AVG(jikwon_pay) FROM jikwon
+GROUP BY buser_num 
+HAVING AVG(jikwon_pay) > (SELECT AVG(jikwon_pay) FROM jikwon 
+WHERE buser_num=30);
+
+-- EXISTS : 반환 값이 true, false
+-- 직원이 있는 부서 출력
+SELECT buser_name, buser_tel from buser bu
+WHERE EXISTS (SELECT 'imsi' FROM jikwon WHERE buser_num=bu.buser_no);
+
+-- 직원이 없는 부서 출력
+SELECT buser_name, buser_tel from buser bu
+WHERE not EXISTS (SELECT 'imsi' FROM jikwon WHERE buser_num=bu.buser_no);
+
+
+-- 상관 서브 쿼리
+-- outer(main) query의 각 행을 inner query에서 참조하여 수행하는 subquery
+-- 안쪽 질의에서 바깥쪽 질의를 참조하고, 다시 안쪽의 결과를 바깥쪽 질의에서 참조
+-- 각 부서별 최대 연봉자 출력
+select jikwon_no,jikwon_name,jikwon_pay,buser_num 
+FROM jikwon a
+WHERE a.jikwon_pay=(SELECT MAX(b.jikwon_pay) FROM jikwon b
+WHERE a.buser_num=b.buser_num);
+
+-- 연봉 순위 3위 이내의 직원 자료 출력(내림차순)
+SELECT a.jikwon_name,a.jikwon_pay FROM jikwon a
+WHERE 3 > (SELECT COUNT(*) FROM jikwon b WHERE b.jikwon_pay > a.jikwon_pay)
+AND jikwon_pay IS NOT null
+ORDER BY jikwon_pay DESC;
+
+-- create table 에서 subquery 사용
+CREATE
+ TABLE jik1 AS SELECT * FROM jikwon;  -- 테이블 복사 효과 : pk는 제외
+DESC jik1;
+DESC jikwon;
+SELECT * FROM jik1;
+
+DROP TABLE jik2;
+CREATE TABLE jik2 AS SELECT * FROM jikwon WHERE 1=0; -- 구조만 있는 테이블 생성
+DESC jik2;
+SELECT * FROM jik2;
+
+-- insert에서 subquery 사용
+-- INSERT INTO jik2 VALUES ...
+INSERT INTO jik2 SELECT * FROM jikwon WHERE jikwon_jik='과장';
+SELECT * FROM jik2;
+
+INSERT INTO jik2(jikwon_no,jikwon_name,buser_num,jikwon_jik) SELECT 
+jikwon_no,jikwon_name,buser_num,jikwon_jik FROM jikwon WHERE jikwon_jik='대리';
+SELECT * FROM jik2;
+
+INSERT INTO jik2(jikwon_no) SELECT jikwon_no FROM jikwon 
+WHERE jikwon_jik='이사'; -- not null인 컬럼은 포함
+
+SELECT * FROM jik2;
+
+CREATE TABLE jik3 AS 
+SELECT jikwon_no AS bunho,jikwon_name AS irum,jikwon_pay AS pay 
+FROM jikwon WHERE 1=0;
+
+DESC jik3;
+INSERT INTO jik3(bunho,irum,pay) SELECT 
+jikwon_no,jikwon_name,jikwon_pay FROM jikwon WHERE jikwon_jik='대리';
+
+SELECT * FROM jik3;
+INSERT INTO jik3 VALUES(31,'신기해',8888);
+SELECT * FROM jik3;
+
+-- update에 subquery
+SELECT * from jik1;
+UPDATE jik1 SET jikwon_jik=(SELECT jikwon_jik from jikwon
+WHERE jikwon_name='이순신') WHERE jikwon_no=1;
+SELECT * from jik1;
+
+-- delete에 subquery
+DELETE FROM jik1 WHERE jikwon_no IN (SELECT 
+DISTINCT gogek_damsano FROM gogek);
+
+SELECT * FROM jik1;
+
+
+-- Database transactions : 데이터베이스의 상태를 변화시키기 위해 수행하는 작업 단위
+-- 단위(논리적인)별 데이터 처리
+-- 클라이언트가 insert, update, delete 작업을 하면 작업단위가 시작된다.
+-- 작업단위의 종료는 commit(DB 서버 자료 원본 갱신) 또는 
+-- rollback(클라이언트의 insert, update, delete 작업을 취소)을 사용한다.
+-- 데이터베이스 트랜잭션은 ACID라는 특성을 가지고 있다.\
+-- ACID는 데이터베이스 내에서 일어나는 하나의 트랜잭션(transaction)의 안전성을 보장하기 위해 필요한 성질이다.
+-- Atomicity (원자성), Consistency (일관성), Isolation (격리성, 고립성), Durability (지속성)
+-- https://hanamon.kr/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EC%9D%98-acid-%EC%84%B1%EC%A7%88/
+
+-- MariaDB 제공 SQL 연습용 툴은 autocommit이 true임
+
+SELECT * FROM jik1;
+INSERT INTO jik1(jikwon_no,jikwon_name,buser_num) 
+VALUES (31,'tom',10);
+
+SET autocommit=FALSE;  -- Transaction을 수동
+
+INSERT INTO jik1(jikwon_no,jikwon_name,buser_num) 
+VALUES (32,'james',20);  -- TRANSACTION 시작
+INSERT INTO jik1(jikwon_no,jikwon_name,buser_num) 
+VALUES (33,'oscar',20);
+SELECT * FROM jik1;  -- local에서만 추가
+-- ROLLBACK;         -- TRANSACTION 끝
+COMMIT;     -- TRANSACTION 끝
+SELECT * FROM jik1;
+
+SET autocommit=True;  -- Transaction을 자동
+
+
+-- savepoint(저장 지점) 지정하기
+SHOW VARIABLES LIKE 'autocommit%';   -- autocommit 상태 확인
+
+SET autocommit=FALSE;
+
+SELECT * FROM jik1 where jikwon_no=8; 
+UPDATE jik1 SET jikwon_pay=7777 where jikwon_no=8;
+SELECT * FROM jik1;
+SAVEPOINT aa;
+
+UPDATE jik1 SET jikwon_pay=6666 where jikwon_no=10;
+SELECT * FROM jik1;
+ROLLBACK TO SAVEPOINT aa;
+
+UPDATE jik1 SET jikwon_pay=5555 where jikwon_no=7;
+COMMIT;
+SELECT * FROM jik1;
+
+SET autocommit=TRUE;
+SHOW VARIABLES LIKE 'autocommit%';
+
+
+-- deadlock :교착 상태(膠着狀態) 또는 데드락(영어: deadlock)은 
+-- 두 개 이상의 작업이 서로 상대방의 작업이 끝나기 만을 기다리고 
+-- 있기 때문에 결과적으로 아무것도 완료되지 못하는 상태이다. 
+SET autocommit=FALSE; -- 수동
+
+SELECT * FROM jik1;
+UPDATE jik1 SET jikwon_name='김밥' WHERE jikwon_no=7;  -- 작업단위 시작
+DELETE FROM jik1 WHERE jikwon_no IN(14,15,16);
+SELECT * FROM jik1;
+COMMIT;  -- 작업단위 종료 - 주의:Transaction 처리는 빠른 기간 내에 마무리 필요
+SELECT * FROM jik1;
+
+SET autocommit=true; -- 자동
+
+-- view 파일 :
+-- 데이터베이스에 존재하는 일종의 가상 테이블을 말합니다.
+-- 이러한 뷰를 이용하여 실제 테이블처럼 행과 열을 가지고 있지만, 
+-- 실제로 데이터를 저장하고 있지는 않습니다.즉, 우리가 여러 테이블을 
+-- 번거롭게 들러서 확인을 해야 할 때 혹은 SELECT 문을 겹겹이 사용해서 
+-- 어려운 쿼리문으로 조회를 수행해야 할 때 이러한 번거로움을 줄여주는 것이 
+-- 바로 뷰(View)!!!
+
+-- 뷰의 장점
+-- 1. 특정 사용자에게 테이블 전체가 아닌 필요 자료만 보여줄 수 있음. 보안 강화
+-- 2. 복잡한 쿼리를 단순화해서 사용할 수 있음
+-- 3. 위와 같이 사용한 쿼리를 재사용할 수 있음. 독립성 확보
+-- 4. 메모리 절감 효과가 있다.
+-- 뷰의 단점
+-- 1. 삽입, 삭제, 갱신 작업에 많은 제한 사항을 가짐
+-- 2. 뷰는 자신만의 인덱스를 가질 수 없음
+
+-- 형식
+-- CREATE [or REPLACE] VIEW [view_name] AS SELECT 문
+-- DROP VIEW view_name
+
+CREATE OR REPLACE VIEW v_a as
+SELECT jikwon_no,jikwon_name,jikwon_pay FROM jikwon
+WHERE jikwon_ibsail < '2010-12-31';
+
+SHOW FULL TABLES IN mydb WHERE table_TYPE LIKE 'VIEW'; 
+
+DESC v_a;
+SELECT * FROM v_a;
+SELECT jikwon_no, SUM(jikwon_pay) AS paysum FROM v_a;
+SELECT COUNT(*) FROM v_a;
+
+CREATE VIEW v_b AS 
+SELECT * FROM jikwon WHERE jikwon_name LIKE '김%' OR
+jikwon_name LIKE '박%';
+
+SELECT * FROM v_b;
+
+ALTER TABLE jikwon RENAME sbs;  -- 테이블 이름 변경
+
+SELECT * FROM v_a;   -- err : 원본(물리적) 테이블이 있어야 함
+SELECT * FROM v_b;
+
+ALTER TABLE sbs RENAME jikwon; 
+
+SELECT * FROM v_a;   -- good
+
+CREATE VIEW v_c AS SELECT * FROM jikwon ORDER BY jikwon_pay DESC;
+SELECT * FROM v_c; 
+
+DROP VIEW v_d;
+CREATE VIEW v_d AS SELECT jikwon_no AS 번호,jikwon_name AS 이름,
+jikwon_pay * 10000 AS 연봉
+FROM jikwon ORDER BY jikwon_pay DESC;
+
+SELECT * FROM v_d;
+SELECT jikwon_no, jikwon_name FROM v_d;  -- X
+SELECT 번호, 이름 FROM v_d;  -- O
+SELECT * FROM v_d;
+
+CREATE VIEW v_e AS SELECT * FROM v_d WHERE 연봉 >= 78000000;
+SELECT * FROM v_e;
+DESC v_e;
+
+
+UPDATE v_e SET 이름='공기밥' WHERE 이름='홍길동';
+SELECT * FROM v_e;
+SELECT * FROM v_d;
+SELECT * FROM v_c;
+SELECT * FROM jikwon;
+
+SELECT * FROM v_e;
+UPDATE v_e SET 연봉=0 WHERE 번호=1; -- err 연봉 : 물리적인 컬럼 아님.
+
+SELECT * FROM v_e;
+DELETE FROM v_e WHERE 번호=18;
+SELECT * FROM v_e;
+SELECT * FROM jikwon;
+SELECT * FROM v_e;
+DELETE FROM v_e WHERE 연봉=80000000;
+SELECT * FROM v_e;
+SELECT * FROM jikwon;
+
+DESC jikwon;
+CREATE VIEW v_f AS SELECT jikwon_no,buser_num,jikwon_jik FROM jikwon
+WHERE jikwon_jik='사원';
+SELECT * FROM v_f;
+
+INSERT INTO v_f VALUES(35,40,'대리');  -- err : jikwon_name은 not null
+
+CREATE VIEW v_g AS SELECT jikwon_no,jikwon_name,jikwon_jik FROM jikwon
+WHERE jikwon_jik='사원';
+
+SELECT * FROM v_g;
+
+INSERT INTO v_g VALUES(35,40,'사원');
+INSERT INTO v_g VALUES(36,'신사동','대리');
+SELECT * FROM v_g;
+SELECT * FROM jikwon;
+
+CREATE VIEW v_h AS SELECT jikwon_jik, SUM(jikwon_pay) AS payhap 
+FROM jikwon GROUP BY jikwon_jik;
+SELECT * FROM v_h;
+
+-- INSERT -- X
+-- UPDATE v_h SET jikwon_jik='차장' WHERE jikwon_jik='과장'; -- X
+-- DELETE -- X
+
+CREATE or replace VIEW v_join AS 
+SELECT jikwon_no,jikwon_name,buser_name,jikwon_jik
+FROM jikwon
+INNER JOIN buser ON buser_num=buser_no
+WHERE buser_num IN(10, 30);
+
+SELECT * FROM v_join;
+
+
+/*
+문1) 사번  이름    부서  직급  근무년수 고객확보
+      1   홍길동  영업부 사원     6      O or X
+조건 : 직급이 없으면 임시직, 전산부 자료는 제외
+위의 결과를 위한 뷰파일 v_exam1을 작성
+*/
+
+CREATE OR REPLACE VIEW v_exam1 AS 
+SELECT jikwon_no AS 사번, jikwon_name AS 이름, buser_name 부서, 
+nvl(jikwon_jik,'임시직') AS 직급, 
+TIMESTAMPDIFF(YEAR,jikwon_ibsail,NOW()) AS 근무년수,
+case 
+when jikwon_no IN(SELECT DISTINCT gogek_damsano FROM gogek) then 'O' 
+ELSE 'X' END AS  고객확보
+FROM jikwon LEFT OUTER JOIN buser ON buser_num=buser_no  
+WHERE buser_name <>'전산부' OR buser_name IS NULL;
+
+SELECT * FROM v_exam1;
+
+/*
+문2) 부서명   인원수
+     영업부     7
+조건 : 직원수가 가장 많은 부서 출력
+위의 결과를 위한 뷰파일 v_exam2을 작성
+*/
+CREATE OR REPLACE VIEW v_exam2 AS 
+SELECT buser_name AS 부서명, cnt AS 인원수 
+FROM buser INNER JOIN (SELECT buser_num AS num,COUNT(buser_num) AS cnt 
+FROM jikwon GROUP BY buser_num) AS grpbus ON buser.buser_no=grpbus.num
+WHERE cnt = (SELECT MAX(grpbus.cnt) 
+FROM (SELECT buser_num,COUNT(buser_num) AS cnt FROM jikwon 
+GROUP BY buser_num HAVING buser_num IS NOT NULL) AS grpbus);
+
+SELECT * FROM v_exam2;
+
+SELECT buser_name AS 부서명, COUNT(*) AS 인원수 FROM buser
+INNER JOIN jikwon ON jikwon.buser_num=buser.buser_no 
+GROUP BY buser_name
+HAVING COUNT(*)=(SELECT COUNT(*) FROM jikwon GROUP BY buser_num
+ORDER BY COUNT(*) DESC LIMIT 1);
+
+/*
+문3) 가장 많은 직원이 입사한 요일에 입사한 직원 출력
+    직원명   요일     부서명   부서전화
+    한국인  수요일   전산부   222-2222
+위의 결과를 위한 뷰파일 v_exam3을 작성  
+*/
+CREATE OR REPLACE VIEW v_exam3 AS 
+SELECT jikwon_name AS 직원명, DATE_FORMAT(jikwon_ibsail,'%W') AS 요일,  
+buser_name AS 부서명, buser_tel AS 부서전화 
+FROM jikwon left outer JOIN buser ON jikwon.buser_num=buser.buser_no 
+WHERE DATE_FORMAT(jikwon_ibsail,'%W') IN (
+SELECT grpday.days FROM (
+SELECT DATE_FORMAT(jikwon_ibsail,'%W') AS days, 
+COUNT(DATE_FORMAT(jikwon_ibsail,'%W')) AS cnt 
+FROM jikwon GROUP BY days HAVING days IS NOT NULL) AS grpday
+WHERE grpday.cnt = (SELECT max(grpday.cnt) 
+FROM (SELECT DATE_FORMAT(jikwon_ibsail,'%W') AS days,
+COUNT(DATE_FORMAT(jikwon_ibsail,'%W')) AS cnt FROM jikwon 
+GROUP BY days HAVING days IS NOT NULL) AS grpday));
+
+SELECT * FROM v_exam3;
+
+SELECT jikwon_name AS 직원명, DATE_FORMAT(jikwon_ibsail,'%W') AS 요일,  
+buser_name AS 부서명, buser_tel AS 부서전화 
+FROM jikwon 
+left outer JOIN buser ON jikwon.buser_num=buser.buser_no
+WHERE DATE_FORMAT(jikwon_ibsail,'%W')=(
+SELECT DATE_FORMAT(jikwon_ibsail,'%W') FROM jikwon
+GROUP BY DATE_FORMAT(jikwon_ibsail,'%W')
+HAVING COUNT(*)=(SELECTmydb COUNT(*) FROM jikwon 
+GROUP BY DATE_FORMAT(jikwon_ibsail,'%W') ORDER BY COUNT(*) DESC LIMIT 1));  
+
+
+-- MariaDB(MySQL) 설치하게 되면 가장 먼저 사용되는 계정이 바로 root 계정이다.
+-- root 계정의 경우 관리자 계정이기 때문에 데이터베이스에 대한 모든 권한을 
+-- 가지고 있다. 
+-- 때문에 실제 서비스에 사용되는 DB의 경우 실질적인 관리자만 root 계정을 
+-- 사용하고 이외의 DB 사용자들은 용도에 맞는 권한을 부여받은 계정을 
+-- 이용하는 것이 데이터베이스를 관리하는데 있어서 좋은 방식이다.
+-- ...
+
+
+-- 간단한 백업과 복구
+-- https://www.lesstif.com/dbms/mysqldump-db-backup-load-17105804.html
+CREATE DATABASE ourdb;
+USE ourdb;
+SHOW TABLES;
+CREATE TABLE good(NO INT PRIMARY KEY, NAME VARCHAR(10));
+INSERT INTO good VALUES(1,'재형이');
+INSERT INTO good VALUES(2,'보현이');
+SELECT * FROM good;
+
+-- cmd 창에서   C:\Users\user>cd C:\Program Files\MariaDB 10.6\bin
+-- C:\...\bin>mysqldump -uroot -p123 ourdb > c:\work\kbs_backup.sql
+-- kbs_backup.sql 백업 파일 작성 성공
+
+DROP DATABASE ourdb;
+SHOW DATABASES;
+
+-- 백업 파일로 DB 복구
+create DATABASE ourdb;
+USE ourdb;
+-- C:\...\bin>mysql -uroot -p123 ourdb < c:\work\kbs_backup.sql
+
+SHOW TABLES;
+DESC good;
+SELECT * FROM good;
+
+
+/*
+*** 저장 프로시저 (Stroed Procedure) ***
+쿼리문들의 집합으로, 어떤 동작을 여러쿼리를 거쳐서 일괄적으로 처리할 때 사용한다.
+절차적인 프로그래밍을 사용한다. (SQL + <변수, 제어문 등>)
+저장 프로시저를 실무에서 사용하는 이유는
+- SQL Server의 성능을 향상 시킬 수 있다.
+- 유지보수 및 재활용 측면에서 좋다.
+- 셋째, 보안을 강화할 수 있다.
+- 네트워크의 부하를 줄일 수 있다.
+
+클라이언트에서 서버로 쿼리의 모든 텍스트가 전송될 경우 네트워크에는 
+큰 부하가 발생하게 된다. 하지만 저장 프로시저를 이용한다면 
+저장프로시저의 이름, 매개변수 등 몇글자만 전송하면 되기 때문에 부하를 
+크게 줄일 수 있다.
+*/
+
+USE mydb;
+
+-- ex1
+delimiter //   -- // 대신 $$도 가능
+CREATE OR REPLACE PROCEDURE sp_1(a INT, b INT)
+BEGIN   -- PROCEDURE 본체 시작
+DECLARE X,Y INT DEFAULT 0;  -- 변수 선언. 대소문자 구분 없다.
+SET X = 10;  -- 변수에 값 대입
+SELECT X, Y;   -- 콘솔로 출력
+SELECT a + b;  -- 두 변수의 합을 반환 
+END;    -- PROCEDURE 본체 끝
+//
+delimiter ;
+
+CALL sp_1(1, 3);
+CALL sp_1(100, 35);
+
+SHOW PROCEDURE STATUS;
+SHOW CREATE PROCEDURE sp_1;
+DROP PROCEDURE sp_1;
+
+-- ex2
+delimiter //   
+CREATE OR REPLACE PROCEDURE sp_2()
+BEGIN
+SELECT * FROM jikwon WHERE jikwon_no < 5;
+SELECT * FROM buser;
+END 
+//
+delimiter ;
+
+CALL sp_2;
+
+
+-- ex3
+delimiter //   
+CREATE OR REPLACE PROCEDURE sp_3(para1 INT, para2 INT)
+BEGIN
+SELECT * FROM jikwon WHERE jikwon_no=para1;
+SELECT * FROM jikwon WHERE jikwon_no=para2;
+END 
+//
+delimiter ;
+
+CALL sp_3(3, 8);
+
+
+ ex4 : if
+delimiter //   
+CREATE OR REPLACE PROCEDURE sp_4(IN jik VARCHAR(20) CHARSET UTF8, num INT)
+BEGIN
+SELECT jik;
+SELECT * FROM jikwon WHERE jikwon_jik=jik;
+
+if(num = 10) then 
+	SELECT * FROM jikwon WHERE buser_num=10;
+elseif(num = 20) then 
+	SELECT * FROM jikwon WHERE buser_num=20;
+ELSE 
+	SELECT * FROM jikwon WHERE buser_num NOT IN(10,20);
+END if;
+
+END 
+//
+delimiter ;
+
+CALL sp_4('대리', 20);
+CALL sp_4('부장', 30);
+
+ ex5 : while
+delimiter //   
+DROP PROCEDURE if EXISTS sp_5 //
+CREATE PROCEDURE sp_5()
+BEGIN
+DECLARE x INT;
+DECLARE str VARCHAR(255);
+SET x = 1;
+SET str = '';
+
+WHILE X <= 5 DO
+	SET str = CONCAT(str , x, ',');
+	SET X = X + 1;
+END WHILE;
+
+SELECT str;
+END 
+//
+delimiter ;
+
+CALL sp_5;
+
+
+ ex5 : repeat
+delimiter //   
+DROP PROCEDURE if EXISTS sp_6 //
+CREATE PROCEDURE sp_6()
+BEGIN
+DECLARE x INT;
+DECLARE str VARCHAR(255);
+SET x = 1;
+SET str = '';
+
+REPEAT
+	SET str = CONCAT(str , x, ',');
+	SET X = X + 2;
+UNTIL X > 5
+END REPEAT;
+
+SELECT str;
+END 
+//
+delimiter ;
+
+CALL sp_6;
+
+
+-- 사용자 정의 함수 만들기
+-- ex1 : BMI 계산 함수 만들기 
+-- 표준체중(BMI값22 기준) = 신장(cm) * 신장(cm) * 22 / 10000
+
+delimiter $$   
+CREATE OR REPLACE FUNCTION fu1(height INT) RETURNS DOUBLE 
+BEGIN
+	RETURN height * height * 22 / 10000;
+END 
+$$
+delimiter ;
+
+SELECT fu1(175);  -- 몸무게를 반환하면 출력
+
+
+-- ex2 : 직원 전체의 연봉 평균 반환
+delimiter $$   
+CREATE OR REPLACE FUNCTION fu2() RETURNS DOUBLE 
+BEGIN
+	DECLARE r DOUBLE;
+	SELECT AVG(jikwon_pay) INTO r FROM jikwon; -- 평균을 구해 변수 r에게 치환
+	RETURN r;
+END 
+$$
+delimiter ;
+
+SELECT fu2(); -- 반환된 연봉 평균 출력
+
+
+-- ex3 : 각 직원 연봉의 10% 반환
+delimiter $$   
+CREATE OR REPLACE FUNCTION fu3(NO INT) RETURNS int
+BEGIN
+	DECLARE pay INT;
+	SET pay = 0;
+	SELECT jikwon_pay * 0.1 INTO pay FROM jikwon WHERE jikwon_no=NO;
+	RETURN pay;
+END 
+$$
+delimiter ;
+
+SELECT fu3(9);
+
+SELECT jikwon_no,jikwon_name,jikwon_pay,fu3(jikwon_no) AS donate 
+from jikwon WHERE jikwon_pay IS NOT NULL AND jikwon_jik='사원';
+
+
+-- ex4 : 각 직원 부서명 반환
+delimiter $$   
+CREATE OR REPLACE FUNCTION fu4(NO INT) RETURNS VARCHAR(10) CHARSET UTF8 
+BEGIN
+	DECLARE bname VARCHAR(10) CHARSET UTF8;
+	SELECT buser_name INTO bname FROM buser 
+	WHERE buser_no=(SELECT buser_num FROM jikwon WHERE jikwon_no=NO);
+	RETURN bname;
+END 
+$$
+delimiter ;
+
+SELECT fu4(3);
+
+SELECT jikwon_no,jikwon_name,jikwon_pay,fu4(jikwon_no) AS buser_name 
+from jikwon WHERE jikwon_pay IS NOT NULL AND jikwon_jik='사원';
+
+
+-- ex5 : 부서번호를 입력하면 부서명 반환
+delimiter $$   
+CREATE
+ OR REPLACE FUNCTION fu5(bNO INT) RETURNS VARCHAR(10) CHARSET UTF8 
+BEGIN
+	DECLARE bname VARCHAR(10) CHARSET UTF8;
+	SELECT buser_name INTO bname FROM buser 
+	WHERE buser_no=bNO;
+	RETURN bname;
+END 
+$$
+delimiter ;
+
+SELECT fu5(10);
+
+SELECT jikwon_no,jikwon_name,jikwon_pay,fu5(buser_num) AS buser_name 
+from jikwon WHERE jikwon_pay IS NOT NULL AND jikwon_jik='사원';
+
+
+--사용자 정의 함수 작성
+-- 사용자 정의 함수 작성
+-- 문1) jikwon 테이블에 대해 부서번호가 있으면 부서명을 없으면 '임시직'을 반환하는 함수 작성
+delimiter //
+CREATE OR REPLACE FUNCTION ft1(jno INT) RETURNS VARCHAR(10) CHARSET UTF8
+BEGIN
+DECLARE buname VARCHAR(10) CHARSET UTF8;
+SELECT buser_name INTO buname 
+FROM buser right OUTER JOIN jikwon on buser_num= buser_no WHERE jikwon_no=jno;
+
+if(buname IS NOT null ) then RETURN buname;
+ELSE RETURN '임시직';
+END if;
+
+END 
+//
+delimiter ;
+
+SELECT ft1(7);
+SELECT jikwon_no,jikwon_name,ft1(jikwon_no) as buser FROM jikwon;
+
+
+-- 문2) 고객번호를 입력하면 나이를 출력하는 함수 작성 
+delimiter //
+CREATE OR REPLACE FUNCTION ft2(gNO int) RETURNS int
+BEGIN 
+DECLARE age INT;
+SELECT TIMESTAMPDIFF(YEAR, CAST(substr(gogek_jumin,1,6) AS DATE), NOW()) 
+INTO age FROM gogek WHERE gogek_no = gNO;
+RETURN age;
+END 
+//
+delimiter ;
+
+SELECT ft2(5);
+select gogek_no, gogek_name, ft2(gogek_no) as nai from gogek; 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.korea{
+	font-size: 30px;
+	font-style: italic;
+}
+</style>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+// $() : Factory 함수 : 문서를 객체화 한다
+// window.onload = function(){};
+
+// window.onload = function(){console.log("window onload 1");}
+// 	window.onload = function(){console.log("window onload 2");} 
+// 	$(document).ready(function(){console.log("document ready 1")});
+// 	$(document).ready(function(){console.log("document ready 2")});
+
+
+// $(document).ready(function(){
+	jQuery(document).ready(function(){  // $ 대신 jQuery() 도 가능
+// 	alert("ok");
+// 	body 태그 내 요소, 속성, 값 선택
+	$("p").css("border", "1px solid #ff0000");  // 요소 선택
+	$(".my").css("border", "1px double cyan");  // 클래스 선택
+	jQuery("div div#content").css("background-color", "yellow");  // id 선택
+	$("span > i").css("color", "red").css("font-size", "28px");  //  method chain
+
+});
+	
+// 	$(document).ready(function(){
+// 		})
+	$(function(){
+		$("strong#kor").css("color", "orange").addClass("korea");
+		
+	});
+	
+	$(document).ready(function(){
+			$("div > a[target]").css("background-color", "#ff0");
+			$("div > a[href!='https://korea.com']").css("font-size", "24px");
+			
+			//  정규 표현식
+			$("div[id^='mb']").css("background-color", "gold");   //  id 속성 값이 mb로 시작되는 ~
+			$("div[id$='s']").css("background-color", "silver");    //   id 속성 값이 s 로 끝나는 ~
+			
+			$("a[href*='daum']").css("color", "blue").css("font-size", "40px");   //  href 속성 값에 daum 문자열이 포함된 ~
+	});
+	
+	$(document).ready(function(){
+// 		실행 중 요소 추가
+		
+// 			$('b')  // document.getElmentsByTagName('b')	
+// 			$('b').prepend('<h2>요소 추가(기존 요소 앞)</h2>');
+			$('<h2>요소 추가(기존 요소 앞)</h2>').prependTo('b');		// 위와 결과 동일
+			
+// 			$('b').append('<h6>요소 추가(기존 요소 뒤)</h6>');
+			$('<h6>요소 추가(기존 요소 뒤)</h6>').appendTo('b');		// 위와 결과 동일
+			
+			// 요소 수 만큼 반복 처리  ----
+			let ss = "";
+			$('li').each(function(){
+				// ss += $(this).text() + ", ";  // innerText 
+				ss += $(this).html() + ", ";  // this 현재 반복대상 요소. innerHTML=대상
+				
+				});
+// 				$("#show").text(ss);
+				$("#show").html(ss);
+	});
+</script>
+
+</head>
+<body>
+<pre>
+<h2>jQuery 셀렉터 연습</h2>
+ jQuery란?
+JS의 라이브러리
+- DOM 탐색이나 이벤트, 애니메이션, ajax 등을 활용할 때 유용하게 사용
+-  JS에서 수행하는 것과 동알힌 작업을 수행하는 데 사용할 수 있는데 jQuery를 사용하면 대부분 JS보다 적은 양의 코드로 수행할 수 있다.
+-  css의 선택자처럼 선택자를 사용하여 DOM 요소의 검색, 선택 및 조작을 단순화한다.
+-  크로스 브라우저를 지원한다.
+- 브라우저별로 처리 방법이 다른 이벤트 처리나 함수들의 문장을 하나의 표현으로 사용 가능
+✨ Vanila JS와 jQuery
+- VanilaJS와 jQuery는 동적인 웹 페이지를 만드는 데 널리 사용되는 웹 기술이다.
+- Vanila JS는 높은 수준의 프로그래밍 언어이고 jQuery는 JS를 사용하여 수행되는 작업을 단순화하도록 설계된 오픈 소스 기반의 JS의 라이브러리이다.
+</pre>
+<h2>jQuery 연습</h2>
+<p class="my">초여름의 시작</p>
+<p>더위를 이길 체력 충전</p>
+<div>
+	<div id="content">5월의 마지막 주</div>
+</div>
+<span><i>바람이 부는 오후</i></span>
+<span>공기는 맑음</span>
+<br>
+<strong id="kor">대한민국</strong>
+<hr>
+<div id="kbs">
+<a href="https://naver.com">naver target X</a><br>
+<a href="https://naver.com" target="_blank">naver target O</a><br>
+<a href="https://korea.com">Korea target X</a><br>
+<a href="https://korea.com" target="_blank">Korea target O</a><br>
+</div>
+<br>
+<div id="mbc">
+<a href="https://daum.net">daum target X</a><br>
+<a href="https://daum.net" target="_blank">daum target O</a><br>
+</div>
+<hr>
+<b>문서에 실행 도중 요소 추가</b>
+<hr>
+운영체제 종류<br>
+<ul>
+	<li><i>윈도우</i></li>
+	<li>맥 OS</li>
+	<li>리눅스</li>
+</ul>
+<div id="show"></div>
+</body>
+</html>

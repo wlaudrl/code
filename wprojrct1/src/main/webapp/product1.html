@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+window.onload = () => {
+	document.querySelector("#btnOk"),onclick = function(){
+		frm.submit();
+	}
+}
+</script>
+</head>
+<body>
+<table>
+	<tr>
+		<td>
+			<img src="images/sangpum1.jpeg" title="Macbook">
+		</td>
+		<td>
+	<pre>
+Apple 2023 맥북 프로 14 M3
+30% 2,990,000원 
+특가 : 2,093,000원
+이 상품은 
+내일 도착, 
+무료배송
+AppleCare+ 349,000원 
+	</pre>	
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<form action="Cart" name="frm" method="post">
+				<input type="hidden" name="name" value="Apple 2023 맥북 프로 14 M3">
+				<input type="hidden" name="price" value="2093000"> 
+				<input type="button" id="btnOk" value="장바구니에 담기">
+				<input type="button" value="홈으로 이동" onclick="history.back()">
+			</form>
+</table>
+</body>
+</html>

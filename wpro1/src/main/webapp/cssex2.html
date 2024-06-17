@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>layout</title>
+<style type="text/css">
+body{
+	width: 800px;
+	margin: 0 auto;
+}
+
+h2#title{
+	text-align: center;
+}
+
+li.go_site{
+	float : left; width : 60px; margin-left: 5px;
+}
+
+ul{
+	list-style: none;
+}
+
+
+li a {
+	display: block;
+}
+
+.head {
+	border-width: 1px; width: 90%; overflow: auto;
+}
+nav{
+	float: left; width: 120px;
+}
+
+#contents{
+	float: left; width: 400px;
+}
+
+#ad {
+	float: left; width: 200px; font-size: 0.8em;
+}
+
+footer {
+	margin-top : 250px; clear : both;  
+}
+
+
+
+
+</style>
+</head>
+<body>
+<h2 id="title"> *CSS로 화면 레이아웃 연습*</h2>
+<header>
+	<h3>여기는 머릿글</h3>
+	<u1 class="head">
+		<li class="go_site"><a href="https://www.naver.com">네이버</a></li>
+		<li class="go_site"><a href="https://www.korea.com">코리아</a></li>
+		<li class="go_site"><a href="https://www.google.com">구글</a></li>
+	</u1>	
+</header>
+<nav>
+	<h3>항목 선택</h3>
+	<u1>
+		<li>메인</li>
+		<li>자동차</li>
+		<li>반도체</li>
+		<li>스포츠</li>
+		<li>기타</li>
+	</u1>
+</nav>
+
+<div id="contents">
+	<h3>핫 이슈</h3>
+	<span>
+	
+	</span>
+</div>
+
+자바
+Java
+패러다임	프로그래밍 패러다임: 객체 지향 프로그래밍 (클래스 기반 프로그래밍), 구조적 프로그래밍, 명령형 프로그래밍, 제네릭 프로그래밍, 반영, 병행 컴퓨팅
+설계자	제임스 고슬링
+개발자	썬 마이크로시스템즈
+발표일	1995년 5월 23일(28년 전)[1]
+라이선스	GNU 일반 공중 사용 허가서
+자바 커뮤니티 프로세스
+파일 확장자	.java, .class, .jar
+웹사이트	www.oracle.com/java/
+주요 구현체
+OpenJDK, GCJ, 자바 가상 머신
+Java의 제네릭, 피자
+영향을 받은 언어
+에이다 83, C++, C#, 에펠, Java의 제네릭, 메사, 모듈라-3, 오베론, 오브젝티브-C, UCSD 파스칼, 오브젝트 파스칼
+영향을 준 언어
+에이다 2005, 빈셸, 체피, C#, 클로저, ECMA스크립트, 팬텀, 그루비, 해킹, 헤렉, J#, 자바스크립트, 코틀린, PHP, 파이썬, 스칼라, 씨드7, 발라, J++
+자바(영어: Java)는 썬 마이크로시스템즈의 제임스 고슬링(James Gosling)과 다른 연구원들이 개발한 객체 지향적 프로그래밍 언어이다. 1991년 그린 프로젝트(Green Project)라는 이름으로 시작해 1995년에 발표했다. 처음에는 가전제품 내에 탑재해 동작하는 프로그램을 위해 개발되었지만 현재 웹 애플리케이션 분야에 가장 많이 사용하는 언어 중 하나이고, 안드로이드를 비롯한 모바일 기기용 소프트웨어 개발에도 널리 사용되고 있다. 현재 버전 20까지 출시했다.
+
+<div id="ad">
+	<h3>광고 글</h3>
+	<u1>
+		<li>현대</li>
+		<li>삼성</li>
+		<li>엘지</li>
+	</u1>	
+</div>
+
+<footer>
+	<b>나는 바닥글</b>&nbsp;&nbsp; 공지 사항을 주로 기술
+</footer>
+</body>
+</html>

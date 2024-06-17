@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+window.onload = () => {
+	document.querySelector("#btnOk"),onclick = function(){
+		frm.submit();
+	}
+}
+</script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td><img src="images/sangpum2.jpeg" title="Ipad"></td>
+			<td><pre>
+Apple 정품 2022 아이패드 프로 12.9 6세대 M2칩
+4.9
+5,340개 상품평
+30% 1,969,000원 
+1,378,300원
+	
+최대 2% 카드 즉시할인
+품절임박 (1개 남음)
+이 상품은 
+내일 도착, 
+무료배송
+
+AppleCare+ 259,000원 
+	</pre></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<form action="Cart" name="frm" method="post">
+					<input type="hidden" name="name" value="Apple 정품 2022 아이패드 프로 12.9 6세대 M2칩"> <input type="hidden" name="price" value="1378300"> <input type="button" id="btnOk" value="장바구니에 담기"> <input type="button" value="홈으로 이동" onclick="history.back()">
+				</form>
+	</table>
+</body>
+</html>

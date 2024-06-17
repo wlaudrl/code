@@ -1,0 +1,2366 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="color-scheme" content="light only" />
+    <meta name="supported-color-schemes" content="light" />
+    <title>네이버 : 회원가입</title>
+    <link rel="stylesheet" type="text/css" href="/inc/user/css/realname.min.css?240118">
+    <link rel="stylesheet" type="text/css" href="/inc/user/css/realname_dark.min.css?231109" media="(prefers-color-scheme:dark)">
+    <script type="text/javascript" src="https://nid.naver.com/inc/common/js/rsaAll.js?r=20240221"></script>
+    <script type="text/javascript" src="/inc/common/js/lcslog.js?r=20221103"></script>
+    <script type="text/javascript" src="/inc/common/js/nclk_v0.8.1.js?r=20221103"></script>
+    <script type="text/javascript">
+        lcs_do();
+        //nClicks 전역변수
+        var ccsrv = "cc.naver.com";
+        var g_ssc = "nid.join";
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <div class="inner">
+        <h1 class="logo_naver">
+            <a href="http://naver.com" class="link">
+                <span class="blind">네이버</span>
+            </a>
+        </h1>
+        <div class="content">
+            <form id="join_form" method="post" action="/user2/join/end" class="form">
+                <input type="hidden" id="token_sjoin" name="token_sjoin" value="wADibNUecReAxVn3">
+                <input type="hidden" id="nid_kb2" name="nid_kb2" value="">
+                <input type="hidden" id="joinMode" name="joinMode" value="joinIdentity">
+                <input type="hidden" id="encPswd" name="encPswd" value="">
+                <input type="hidden" id="encKey" name="encKey" value="">
+                <input type="hidden" id="telecom" name="telecom" value="">
+                <input type="hidden" id="birthday" name="birthday" value="">
+
+                <div class="form_content">
+                    <div class="form_section">
+
+                            <div class="join_toggle" id="divToggle">
+                                <input type="checkbox" id="join_toggle" checked>
+                                <label for="join_toggle">실명 인증된 아이디로 가입</label>
+                            </div>
+
+                        <div class="form_list">
+                            <div class="form_item user" id="divId">
+                                <input type="text" id="id" name="id" placeholder="아이디" class="input" value="" maxlength="20" autocapitalize="off"/>
+                                <div class="id_naver">@naver.com</div>
+                            </div>
+                            <div class="form_item lock password" id="divPasswd">
+                                <input type="password" id="pswd1" name="pswd1" placeholder="비밀번호" class="input" value="" maxlength="20" autocomplete="new-password" />
+                                <div class="password_info">
+                                    <em class="how_secure" id="secureLevel"></em>
+                                    <button type="button" class="btn_show hide">
+                                        <span class="blind">비밀번호 보기</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form_item email" id="divEmail">
+                                <span class="placeholder_prefix">[선택]</span>
+                                <input type="email" id="email" name="email" placeholder="[선택] 이메일주소 (비밀번호 찾기 등 본인 확인용)" class="input" value="" maxlength="100" />
+                            </div>
+                        </div>
+                        <div class="error_text item_style" id="idMsg" style="display: none"></div>
+                        <div class="error_text item_style" id="pswd1Msg" style="display: none"></div>
+                        <div class="error_text item_style" id="emailMsg" style="display: none"></div>
+
+                        <div class="form_list">
+
+                            <div class="form_item user" id="divName">
+                                <input type="text" id="name" name="name" placeholder="이름" class="input" value="" maxlength="40" />
+                            </div>
+                            <div class="form_item calendar" id="divBirthday">
+                                <input type="text" id="birthdayInput" placeholder="생년월일 8자리" class="input" value="" maxlength="10"/>
+                            </div>
+
+                            <div class="form_item telecom" id="divTelecom">
+                                <button type="button" id="btn_telecom" class="btn_telecom" aria-expanded="false" aria-controls="telecom_menu">
+                                    <span class="placeholder">통신사 선택</span>
+                                </button>
+                                <ul role="menu" id="telecom_menu" class="telecom_menu">
+                                    <li role="presentation" class="item">
+                                        <button type="button" role="menuitem" class="button" id="btnTelecom1">
+                                            <span class="text">SKT</span>
+                                        </button>
+                                    </li>
+                                    <li role="presentation" class="item">
+                                        <button type="button" role="menuitem" class="button" id="btnTelecom2">
+                                            <span class="text">SKT 알뜰폰</span>
+                                        </button>
+                                    </li>
+                                    <li role="presentation" class="item">
+                                        <button type="button" role="menuitem" class="button" id="btnTelecom3">
+                                            <span class="text">KT</span>
+                                        </button>
+                                    </li>
+                                    <li role="presentation" class="item">
+                                        <button type="button" role="menuitem" class="button" id="btnTelecom4">
+                                            <span class="text">KT 알뜰폰</span>
+                                        </button>
+                                    </li>
+                                    <li role="presentation" class="item">
+                                        <button type="button" role="menuitem" class="button" id="btnTelecom5">
+                                            <span class="text">LG U+</span>
+                                        </button>
+                                    </li>
+                                    <li role="presentation" class="item">
+                                        <button type="button" role="menuitem" class="button" id="btnTelecom6">
+                                            <span class="text">LG U+ 알뜰폰</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="form_item adult" id="divIdentityGender">
+                                <ul class="adult_list" id="listIdentityGender">
+                                    <li class="radio_item">
+                                        <input type="radio" id="identityGender1" name="identityGender" value="M" class="blind">
+                                        <label for="identityGender1">남자</label>
+                                    </li>
+                                    <li class="radio_item">
+                                        <input type="radio" id="identityGender2" name="identityGender" value="F" class="blind">
+                                        <label for="identityGender2">여자</label>
+                                    </li>
+                                </ul>
+                                <ul class="adult_list" id="listForeigner">
+                                    <li class="radio_item">
+                                        <input type="radio" id="foreigner1" name="foreigner" value="K" checked class="blind">
+                                        <label for="foreigner1">내국인</label>
+                                    </li>
+                                    <li class="radio_item">
+                                        <input type="radio" id="foreigner2" name="foreigner" value="F" class="blind">
+                                        <label for="foreigner2">외국인</label>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="form_item gender" id="divGender">
+                                <ul class="gender_list" id="listGender">
+                                    <li class="radio_item">
+                                        <input type="radio" id="gender1" name="gender" value="M" class="blind">
+                                        <label for="gender1">남자</label>
+                                    </li>
+                                    <li class="radio_item">
+                                        <input type="radio" id="gender2" name="gender" value="F" class="blind">
+                                        <label for="gender2">여자</label>
+                                    </li>
+                                    <li class="radio_item">
+                                        <input type="radio" id="gender3" name="gender" value="O" class="blind">
+                                        <label for="gender3">선택안함</label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="form_item globe" id="divNationNo">
+                                <div class="select_box" id="selNationNo">
+                                    <select id="nationNo" name="nationNo" class="select">
+                                                    <option value="233" >
+                                                        가나 +233
+                                                    </option>
+                                                    <option value="241" >
+                                                        가봉 +241
+                                                    </option>
+                                                    <option value="592" >
+                                                        가이아나 +592
+                                                    </option>
+                                                    <option value="220" >
+                                                        감비아 +220
+                                                    </option>
+                                                    <option value="502" >
+                                                        과테말라 +502
+                                                    </option>
+                                                    <option value="1671" >
+                                                        괌 +1 671
+                                                    </option>
+                                                    <option value="1473" >
+                                                        그레나다 +1 473
+                                                    </option>
+                                                    <option value="30" >
+                                                        그리스 +30
+                                                    </option>
+                                                    <option value="224" >
+                                                        기니 +224
+                                                    </option>
+                                                    <option value="245" >
+                                                        기니비사우 +245
+                                                    </option>
+                                                    <option value="264" >
+                                                        나미비아 +264
+                                                    </option>
+                                                    <option value="674" >
+                                                        나우루 +674
+                                                    </option>
+                                                    <option value="234" >
+                                                        나이지리아 +234
+                                                    </option>
+                                                    <option value="672" >
+                                                        남극,오스트레일리아의외 +672
+                                                    </option>
+                                                    <option value="27" >
+                                                        남아프리카공화국 +27
+                                                    </option>
+                                                    <option value="31" >
+                                                        네덜란드 +31
+                                                    </option>
+                                                    <option value="599" >
+                                                        네덜란드령보네르 +599
+                                                    </option>
+                                                    <option value="297" >
+                                                        네덜란드령아루바 +297
+                                                    </option>
+                                                    <option value="977" >
+                                                        네팔 +977
+                                                    </option>
+                                                    <option value="47" >
+                                                        노르웨이 +47
+                                                    </option>
+                                                    <option value="64" >
+                                                        뉴질랜드 +64
+                                                    </option>
+                                                    <option value="683" >
+                                                        뉴질랜드령니우에 +683
+                                                    </option>
+                                                    <option value="690" >
+                                                        뉴질랜드령토켈라우제도 +690
+                                                    </option>
+                                                    <option value="227" >
+                                                        니제르 +227
+                                                    </option>
+                                                    <option value="505" >
+                                                        니카라과 +505
+                                                    </option>
+                                                    <option value="82" selected>
+                                                        대한민국 +82
+                                                    </option>
+                                                    <option value="45" >
+                                                        덴마크 +45
+                                                    </option>
+                                                    <option value="299" >
+                                                        덴마크령그린란드 +299
+                                                    </option>
+                                                    <option value="298" >
+                                                        덴마크령페로제도 +298
+                                                    </option>
+                                                    <option value="1809" >
+                                                        도미니카공화국 +1 809
+                                                    </option>
+                                                    <option value="1829" >
+                                                        도미니카공화국 2 +1 829
+                                                    </option>
+                                                    <option value="1849" >
+                                                        도미니카공화국 3 +1 849
+                                                    </option>
+                                                    <option value="49" >
+                                                        독일 +49
+                                                    </option>
+                                                    <option value="670" >
+                                                        동티모르 +670
+                                                    </option>
+                                                    <option value="856" >
+                                                        라오스 +856
+                                                    </option>
+                                                    <option value="231" >
+                                                        라이베리아 +231
+                                                    </option>
+                                                    <option value="371" >
+                                                        라트비아 +371
+                                                    </option>
+                                                    <option value="7" >
+                                                        러시아/카자흐스탄 +7
+                                                    </option>
+                                                    <option value="961" >
+                                                        레바논 +961
+                                                    </option>
+                                                    <option value="266" >
+                                                        레소토 +266
+                                                    </option>
+                                                    <option value="40" >
+                                                        루마니아 +40
+                                                    </option>
+                                                    <option value="352" >
+                                                        룩셈부르크 +352
+                                                    </option>
+                                                    <option value="250" >
+                                                        르완다 +250
+                                                    </option>
+                                                    <option value="218" >
+                                                        리비아 +218
+                                                    </option>
+                                                    <option value="370" >
+                                                        리투아니아 +370
+                                                    </option>
+                                                    <option value="423" >
+                                                        리히텐슈타인 +423
+                                                    </option>
+                                                    <option value="261" >
+                                                        마다가스카르 +261
+                                                    </option>
+                                                    <option value="692" >
+                                                        마셜제도공화국 +692
+                                                    </option>
+                                                    <option value="691" >
+                                                        마이크로네시아연방 +691
+                                                    </option>
+                                                    <option value="853" >
+                                                        마카오 +853
+                                                    </option>
+                                                    <option value="389" >
+                                                        마케도니아공화국 +389
+                                                    </option>
+                                                    <option value="265" >
+                                                        말라위 +265
+                                                    </option>
+                                                    <option value="60" >
+                                                        말레이시아 +60
+                                                    </option>
+                                                    <option value="223" >
+                                                        말리 +223
+                                                    </option>
+                                                    <option value="52" >
+                                                        멕시코 +52
+                                                    </option>
+                                                    <option value="377" >
+                                                        모나코 +377
+                                                    </option>
+                                                    <option value="212" >
+                                                        모로코 +212
+                                                    </option>
+                                                    <option value="230" >
+                                                        모리셔스 +230
+                                                    </option>
+                                                    <option value="222" >
+                                                        모리타니아 +222
+                                                    </option>
+                                                    <option value="258" >
+                                                        모잠비크 +258
+                                                    </option>
+                                                    <option value="382" >
+                                                        몬테네그로 +382
+                                                    </option>
+                                                    <option value="373" >
+                                                        몰도바 +373
+                                                    </option>
+                                                    <option value="960" >
+                                                        몰디브 +960
+                                                    </option>
+                                                    <option value="356" >
+                                                        몰타 +356
+                                                    </option>
+                                                    <option value="976" >
+                                                        몽골 +976
+                                                    </option>
+                                                    <option value="1" >
+                                                        미국/캐나다 +1
+                                                    </option>
+                                                    <option value="1670" >
+                                                        미국령북마리아나제도 +1 670
+                                                    </option>
+                                                    <option value="95" >
+                                                        미얀마 +95
+                                                    </option>
+                                                    <option value="678" >
+                                                        바누아투 +678
+                                                    </option>
+                                                    <option value="973" >
+                                                        바레인 +973
+                                                    </option>
+                                                    <option value="1246" >
+                                                        바베이도스 +1 246
+                                                    </option>
+                                                    <option value="1242" >
+                                                        바하마 +1 242
+                                                    </option>
+                                                    <option value="880" >
+                                                        방글라데시 +880
+                                                    </option>
+                                                    <option value="229" >
+                                                        베냉 +229
+                                                    </option>
+                                                    <option value="58" >
+                                                        베네수엘라 +58
+                                                    </option>
+                                                    <option value="84" >
+                                                        베트남 +84
+                                                    </option>
+                                                    <option value="32" >
+                                                        벨기에 +32
+                                                    </option>
+                                                    <option value="375" >
+                                                        벨라루스 +375
+                                                    </option>
+                                                    <option value="501" >
+                                                        벨리즈 +501
+                                                    </option>
+                                                    <option value="387" >
+                                                        보스니아헤르체고비나 +387
+                                                    </option>
+                                                    <option value="267" >
+                                                        보츠와나 +267
+                                                    </option>
+                                                    <option value="591" >
+                                                        볼리비아 +591
+                                                    </option>
+                                                    <option value="257" >
+                                                        부룬디 +257
+                                                    </option>
+                                                    <option value="226" >
+                                                        부르키나파소 +226
+                                                    </option>
+                                                    <option value="975" >
+                                                        부탄 +975
+                                                    </option>
+                                                    <option value="359" >
+                                                        불가리아 +359
+                                                    </option>
+                                                    <option value="55" >
+                                                        브라질 +55
+                                                    </option>
+                                                    <option value="673" >
+                                                        브루나이 +673
+                                                    </option>
+                                                    <option value="685" >
+                                                        사모아 +685
+                                                    </option>
+                                                    <option value="966" >
+                                                        사우디아라비아 +966
+                                                    </option>
+                                                    <option value="378" >
+                                                        산마리노 +378
+                                                    </option>
+                                                    <option value="239" >
+                                                        상투메프린시페 +239
+                                                    </option>
+                                                    <option value="221" >
+                                                        세네갈 +221
+                                                    </option>
+                                                    <option value="381" >
+                                                        세르비아 +381
+                                                    </option>
+                                                    <option value="248" >
+                                                        세이셀 +248
+                                                    </option>
+                                                    <option value="1784" >
+                                                        세인트빈센트그레나딘 +1 784
+                                                    </option>
+                                                    <option value="252" >
+                                                        소말리아 +252
+                                                    </option>
+                                                    <option value="677" >
+                                                        솔로몬제도 +677
+                                                    </option>
+                                                    <option value="249" >
+                                                        수단 +249
+                                                    </option>
+                                                    <option value="597" >
+                                                        수리남 +597
+                                                    </option>
+                                                    <option value="94" >
+                                                        스리랑카 +94
+                                                    </option>
+                                                    <option value="268" >
+                                                        스와질랜드 +268
+                                                    </option>
+                                                    <option value="46" >
+                                                        스웨덴 +46
+                                                    </option>
+                                                    <option value="41" >
+                                                        스위스 +41
+                                                    </option>
+                                                    <option value="34" >
+                                                        스페인 +34
+                                                    </option>
+                                                    <option value="421" >
+                                                        슬로바키아 +421
+                                                    </option>
+                                                    <option value="386" >
+                                                        슬로베니아 +386
+                                                    </option>
+                                                    <option value="963" >
+                                                        시리아 +963
+                                                    </option>
+                                                    <option value="232" >
+                                                        시에라리온 +232
+                                                    </option>
+                                                    <option value="65" >
+                                                        싱가포르 +65
+                                                    </option>
+                                                    <option value="971" >
+                                                        아랍에미리트 +971
+                                                    </option>
+                                                    <option value="374" >
+                                                        아르메니아 +374
+                                                    </option>
+                                                    <option value="54" >
+                                                        아르헨티나 +54
+                                                    </option>
+                                                    <option value="1684" >
+                                                        아메리칸사모아 +1 684
+                                                    </option>
+                                                    <option value="354" >
+                                                        아이슬란드 +354
+                                                    </option>
+                                                    <option value="509" >
+                                                        아이티 +509
+                                                    </option>
+                                                    <option value="353" >
+                                                        아일랜드 +353
+                                                    </option>
+                                                    <option value="994" >
+                                                        아제르바이잔 +994
+                                                    </option>
+                                                    <option value="93" >
+                                                        아프가니스탄 +93
+                                                    </option>
+                                                    <option value="376" >
+                                                        안도라 +376
+                                                    </option>
+                                                    <option value="355" >
+                                                        알바니아 +355
+                                                    </option>
+                                                    <option value="213" >
+                                                        알제리 +213
+                                                    </option>
+                                                    <option value="244" >
+                                                        앙골라 +244
+                                                    </option>
+                                                    <option value="251" >
+                                                        에디오피아 +251
+                                                    </option>
+                                                    <option value="291" >
+                                                        에리트레아 +291
+                                                    </option>
+                                                    <option value="372" >
+                                                        에스토니아 +372
+                                                    </option>
+                                                    <option value="593" >
+                                                        에콰도르 +593
+                                                    </option>
+                                                    <option value="503" >
+                                                        엘살바도르 +503
+                                                    </option>
+                                                    <option value="44" >
+                                                        영국 +44
+                                                    </option>
+                                                    <option value="290" >
+                                                        영국령세인트헬레나 +290
+                                                    </option>
+                                                    <option value="246" >
+                                                        영국령인도양지역 +246
+                                                    </option>
+                                                    <option value="350" >
+                                                        영국령지브롤터 +350
+                                                    </option>
+                                                    <option value="500" >
+                                                        영국령포클랜드제도 +500
+                                                    </option>
+                                                    <option value="967" >
+                                                        예멘 +967
+                                                    </option>
+                                                    <option value="968" >
+                                                        오만 +968
+                                                    </option>
+                                                    <option value="43" >
+                                                        오스트리아 +43
+                                                    </option>
+                                                    <option value="504" >
+                                                        온두라스 +504
+                                                    </option>
+                                                    <option value="962" >
+                                                        요르단 +962
+                                                    </option>
+                                                    <option value="256" >
+                                                        우간다 +256
+                                                    </option>
+                                                    <option value="598" >
+                                                        우루과이 +598
+                                                    </option>
+                                                    <option value="998" >
+                                                        우즈베키스탄 +998
+                                                    </option>
+                                                    <option value="380" >
+                                                        우크라이나 +380
+                                                    </option>
+                                                    <option value="964" >
+                                                        이라크 +964
+                                                    </option>
+                                                    <option value="98" >
+                                                        이란 +98
+                                                    </option>
+                                                    <option value="972" >
+                                                        이스라엘 +972
+                                                    </option>
+                                                    <option value="20" >
+                                                        이집트 +20
+                                                    </option>
+                                                    <option value="39" >
+                                                        이탈리아 +39
+                                                    </option>
+                                                    <option value="91" >
+                                                        인도 +91
+                                                    </option>
+                                                    <option value="62" >
+                                                        인도네시아 +62
+                                                    </option>
+                                                    <option value="81" >
+                                                        일본 +81
+                                                    </option>
+                                                    <option value="1876" >
+                                                        자메이카 +1 876
+                                                    </option>
+                                                    <option value="260" >
+                                                        잠비아 +260
+                                                    </option>
+                                                    <option value="240" >
+                                                        적도기니 +240
+                                                    </option>
+                                                    <option value="995" >
+                                                        조지아 +995
+                                                    </option>
+                                                    <option value="86" >
+                                                        중국 +86
+                                                    </option>
+                                                    <option value="236" >
+                                                        중앙아프리카공화국 +236
+                                                    </option>
+                                                    <option value="253" >
+                                                        지부티 +253
+                                                    </option>
+                                                    <option value="263" >
+                                                        짐바브웨 +263
+                                                    </option>
+                                                    <option value="235" >
+                                                        차드 +235
+                                                    </option>
+                                                    <option value="420" >
+                                                        체코 +420
+                                                    </option>
+                                                    <option value="56" >
+                                                        칠레 +56
+                                                    </option>
+                                                    <option value="237" >
+                                                        카메룬 +237
+                                                    </option>
+                                                    <option value="238" >
+                                                        카보베르데 +238
+                                                    </option>
+                                                    <option value="974" >
+                                                        카타르 +974
+                                                    </option>
+                                                    <option value="855" >
+                                                        캄보디아왕국 +855
+                                                    </option>
+                                                    <option value="254" >
+                                                        케냐 +254
+                                                    </option>
+                                                    <option value="269" >
+                                                        코모로,마요트 +269
+                                                    </option>
+                                                    <option value="506" >
+                                                        코스타리카 +506
+                                                    </option>
+                                                    <option value="225" >
+                                                        코트디부아르 +225
+                                                    </option>
+                                                    <option value="57" >
+                                                        콜롬비아 +57
+                                                    </option>
+                                                    <option value="242" >
+                                                        콩고 +242
+                                                    </option>
+                                                    <option value="243" >
+                                                        콩고민주공화국 +243
+                                                    </option>
+                                                    <option value="53" >
+                                                        쿠바 +53
+                                                    </option>
+                                                    <option value="965" >
+                                                        쿠웨이트 +965
+                                                    </option>
+                                                    <option value="682" >
+                                                        쿡제도 +682
+                                                    </option>
+                                                    <option value="385" >
+                                                        크로아티아 +385
+                                                    </option>
+                                                    <option value="996" >
+                                                        키르기스스탄 +996
+                                                    </option>
+                                                    <option value="686" >
+                                                        키리바시 +686
+                                                    </option>
+                                                    <option value="357" >
+                                                        키프로스 +357
+                                                    </option>
+                                                    <option value="886" >
+                                                        타이완 +886
+                                                    </option>
+                                                    <option value="992" >
+                                                        타지키스탄 +992
+                                                    </option>
+                                                    <option value="255" >
+                                                        탄자니아 +255
+                                                    </option>
+                                                    <option value="66" >
+                                                        태국 +66
+                                                    </option>
+                                                    <option value="90" >
+                                                        터키 +90
+                                                    </option>
+                                                    <option value="228" >
+                                                        토고 +228
+                                                    </option>
+                                                    <option value="676" >
+                                                        통가 +676
+                                                    </option>
+                                                    <option value="993" >
+                                                        투르크메니스탄 +993
+                                                    </option>
+                                                    <option value="216" >
+                                                        튀니지 +216
+                                                    </option>
+                                                    <option value="1868" >
+                                                        트리니다드토바고 +1 868
+                                                    </option>
+                                                    <option value="507" >
+                                                        파나마 +507
+                                                    </option>
+                                                    <option value="595" >
+                                                        파라과이 +595
+                                                    </option>
+                                                    <option value="92" >
+                                                        파키스탄 +92
+                                                    </option>
+                                                    <option value="675" >
+                                                        파푸아뉴기니 +675
+                                                    </option>
+                                                    <option value="680" >
+                                                        팔라우 +680
+                                                    </option>
+                                                    <option value="970" >
+                                                        팔레스타인 +970
+                                                    </option>
+                                                    <option value="51" >
+                                                        페루 +51
+                                                    </option>
+                                                    <option value="351" >
+                                                        포르투갈 +351
+                                                    </option>
+                                                    <option value="48" >
+                                                        폴란드 +48
+                                                    </option>
+                                                    <option value="1787" >
+                                                        푸에르토리코 +1 787
+                                                    </option>
+                                                    <option value="33" >
+                                                        프랑스 +33
+                                                    </option>
+                                                    <option value="590" >
+                                                        프랑스령과들루프 +590
+                                                    </option>
+                                                    <option value="594" >
+                                                        프랑스령기아나 +594
+                                                    </option>
+                                                    <option value="687" >
+                                                        프랑스령뉴칼레도니아 +687
+                                                    </option>
+                                                    <option value="262" >
+                                                        프랑스령레위니옹 +262
+                                                    </option>
+                                                    <option value="596" >
+                                                        프랑스령마르티니크 +596
+                                                    </option>
+                                                    <option value="508" >
+                                                        프랑스령생피에르미클롱 +508
+                                                    </option>
+                                                    <option value="681" >
+                                                        프랑스령월리스푸투나제 +681
+                                                    </option>
+                                                    <option value="689" >
+                                                        프랑스령폴리네시아 +689
+                                                    </option>
+                                                    <option value="679" >
+                                                        피지 +679
+                                                    </option>
+                                                    <option value="358" >
+                                                        핀란드 +358
+                                                    </option>
+                                                    <option value="63" >
+                                                        필리핀 +63
+                                                    </option>
+                                                    <option value="36" >
+                                                        헝가리 +36
+                                                    </option>
+                                                    <option value="61" >
+                                                        호주 +61
+                                                    </option>
+                                                    <option value="852" >
+                                                        홍콩 +852
+                                                    </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form_item phone" id="divPhoneNo">
+                                <input type="tel" id="phoneNo" name="phoneNo" placeholder="휴대전화번호" class="input" value="" maxlength="16" />
+                            </div>
+                        </div>
+                        <div class="error_text item_style" id="nameMsg" style="display: none"></div>
+                        <div class="error_text item_style" id="birthdayMsg" style="display: none"></div>
+                        <div class="error_text item_style" id="telecomMsg" style="display: none"></div>
+                        <div class="error_text item_style" id="genderMsg" style="display: none"></div>
+                        <div class="error_text item_style" id="foreignerMsg" style="display: none"></div>
+                        <div class="error_text item_style" id="phoneNoMsg" style="display: none"></div>
+
+                        <div class="form_list" id="divTerm">
+                            <div class="form_item check_box" id="itemAgree">
+                                <div class="title_area">
+                                    <div class="check_circle">
+                                        <input type="checkbox" id="agree_all" class="blind">
+                                        <label for="agree_all">
+                                            <em class="option point">[필수]</em>
+                                            <span class="text">인증 약관 전체동의</span>
+                                        </label>
+                                    </div>
+                                    <button type="button" class="btn_expand" aria-expanded="false">
+                                        <span class="blind">약관 목록</span>
+                                    </button>
+                                </div>
+                                <ul class="check_list">
+                                    <li class="item">
+                                        <div class="check_normal">
+                                            <input type="checkbox" id="agree_01" class="blind">
+                                            <label for="agree_01">
+                                                <span class="text">개인정보 이용</span>
+                                            </label>
+                                            <a href="https://nid.naver.com/user2/common/terms/terms2?t=viewPersonalInfoTerms&v=1" target="_blank" class="link_arrow">
+                                                <span class="blind">약관 전문보기</span>
+                                            </a>
+                                        </div>
+                                        1
+                                    </li>
+                                    <li class="item">
+                                        <div class="check_normal">
+                                            <input type="checkbox" id="agree_02" class="blind">
+                                            <label for="agree_02">
+                                                <span class="text">고유식별정보 처리</span>
+                                            </label>
+                                            <a href="https://nid.naver.com/user2/common/terms/terms2?t=viewUniqInfoTerms&v=1" target="_blank" class="link_arrow">
+                                                <span class="blind">약관 전문보기</span>
+                                            </a>
+                                        </div>
+                                        2
+                                    </li>
+                                    <li class="item">
+                                        <div class="check_normal">
+                                            <input type="checkbox" id="agree_03" class="blind">
+                                            <label for="agree_03">
+                                                <span class="text">통신사 이용약관</span>
+                                            </label>
+                                            <a href="https://nid.naver.com/user2/common/terms/terms2?t=viewCellPhoneCarriersTerms&v=1" target="_blank" class="link_arrow">
+                                                <span class="blind">약관 전문보기</span>
+                                            </a>
+                                        </div>
+                                        3
+                                    </li>
+                                    <li class="item">
+                                        <div class="check_normal">
+                                            <input type="checkbox" id="agree_04" class="blind">
+                                            <label for="agree_04">
+                                                <span class="text">인증사 이용약관</span>
+                                            </label>
+                                            <a href="https://nid.naver.com/user2/common/terms/terms2?t=viewServiceTerms&v=1" target="_blank" class="link_arrow">
+                                                <span class="blind">약관 전문보기</span>
+                                            </a>
+                                        </div>
+                                        4
+                                    </li>
+                                    <li class="item">
+                                        <div class="check_normal">
+                                            <input type="checkbox" id="agree_05" class="blind">
+                                            <label for="agree_05">
+                                                <span class="text">네이버 개인정보수집</span>
+                                            </label>
+                                            <a href="https://nid.naver.com/user2/common/terms/terms2?t=viewNaverTerms&v=2" target="_blank" class="link_arrow">
+                                                <span class="blind">약관 전문보기</span>
+                                            </a>
+                                        </div>
+                                        5
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="error_text item_style" id="termAgreeMsg" style="display: none"></div>
+
+                        <div class="form_list" id="divAuthNo6" style="display: none">
+                            <div class="form_item lock">
+                                <input type="tel" id="authNo6" name="authNo6" maxlength="6" placeholder="인증번호 6자리 입력" class="input" value="" />
+                                <button type="button" class="btn_retry" id="resendIdentity">재요청</button>
+                            </div>
+                        </div>
+                        <div class="form_list" id="divAuthNo4" style="display: none">
+                            <div class="form_item lock">
+                                <input type="tel" id="authNo4" name="authNo4" maxlength="4" placeholder="인증번호 4자리 입력" class="input" value="" />
+                                <button type="button" class="btn_retry" id="resendOccupancy">재요청</button>
+                            </div>
+                        </div>
+                        <div class="notice_text item_style" id="authNoMsg" style="display: none"></div>
+
+                    </div>
+                </div>
+
+                <div class="btn_submit_wrap" id="divBtnAuth">
+                    <button type="button" class="btn_submit" id="btnSend">인증요청</button>
+                </div>
+                <div class="btn_submit_wrap" id="divBtnJoin">
+                    <button type="button" class="btn_submit" id="btnJoin">가입하기</button>
+                </div>
+                <div class="btn_submit_wrap" id="divBtnJuniver">
+                    <button type="button" class="btn_submit" id="btnJuniver">보호자 동의 받기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="dimlayer" style="display: none;" id="divPopup">
+    <div class="dimbg"></div>
+    <div class="popup_content">
+        <div class="id_popup">
+            <strong class="title">회원님 명의 아이디가 많아<br> 실명인증을 할 수 없어요.<br> 가지고 계신 아이디를 사용해 주세요.</strong>
+            <ul class="id_list" id="listPopup">
+            </ul>
+            <div class="btn_area">
+                <button type="button" class="btn_close" id="btnClose">닫기</button>
+                <button type="button" class="btn_login" id="btnLogin">로그인 하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dimlayer help_modal_style" style="display: none;">
+    <div class="dimbg"></div>
+    <div class="help_modal_wrap">
+        <div class="help_modal">
+            <div class="handle_area">
+                <div class="handle"></div>
+            </div>
+            <strong class="modal_title">인증문자가 도착하지 않는다면?</strong>
+            <ul class="help_list">
+                <li class="item on">
+                    <button type="button" class="btn_expand" aria-expanded="true">정확한 정보를 입력하셨나요?</button>
+                    <div class="desc">
+                        <div>입력하신 정보가 정확한지 확인해 주세요.</div>
+                        <div>정확한 정보를 입력 하셨는데도 문자가 수신되지 않는 경우 휴대전화에서 1588 번호로 온 문자가 스팸 차단 설정되어 있는지 확인하신 뒤 다시 시도해 보세요.</div>
+                        <div>휴대전화에서 스팸 차단이 설정되어 있지 않더라도 통신사에서 1588 번호를 자동으로 차단할 수 있습니다. 사용 중인 통신사에 문의하여 인증번호 문자가 올바르게 수신되는지 확인해 주세요.</div>
+                    </div>
+                </li>
+                <li class="item">
+                    <button type="button" class="btn_expand" aria-expanded="false">최근에 가입한 적이 있나요?</button>
+                    <div class="desc">
+                        <div>네이버는 휴대전화 번호 인증을 통해 일정 기간 내에 정해진 개수의 아이디만 가입이 가능합니다.</div>
+                        <div>기존에 가입하신 아이디를 이용해 주세요.</div><br>
+                        <div>가입하셨던 아이디가 기억나지 않으시다면 '아이디 찾기'에서 회원 정보에 등록한 휴대전화 및 본인 확인 이메일 주소 등으로 가입한 아이디 리스트와 개수를 확인해 주세요.</div>
+                        <a href="https://nid.naver.com/user2/help/idInquiry.nhn?menu=idinquiry" class="link">아이디 찾기 바로가기</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <button type="button" class="btn_expand" aria-expanded="false">가입한 아이디가 3개 이상인가요?</button>
+                    <div class="desc">
+                        <div>네이버는 최대 3개의 아이디만 가입할 수 있습니다. (개인·단체 아이디 포함) 기존에 가입하신 아이디를 이용해 주세요.</div><br>
+                        <div>가입하셨던 아이디가 기억나지 않으시다면 '아이디 찾기'에서 회원 정보에 등록한 휴대전화 및 본인 확인 이메일 주소 등으로 가입한 아이디 리스트와 개수를 확인해 주세요.</div>
+                        <a href="https://nid.naver.com/user2/help/idInquiry.nhn?menu=idinquiry" class="link">아이디 찾기 바로가기</a><br><br>
+                        <div>아이디 찾기에서 확인된 아이디가 2개 이하라면 현재 사용 중인 휴대전화 번호의 이전 사용자가 이미 해당 번호로 가입 가능한 갯수 이상의 아이디를 생성해 둔 상태일 수 있습니다. 이 경우 해당 번호를 현재 사용 중임을 확인할 수 있는 휴대전화 가입 증빙서류를 제출해야 합니다. 증빙서류는 가까운 통신사에 방문하거나 통신사 홈페이지에서 발급할 수 있습니다.</div>
+                        <a href="https://help.naver.com/alias/membership/p.membership/p.membership_500.naver" class="link">휴대전화 가입 증빙서류 제출하기</a>
+                    </div>
+                </li>
+            </ul>
+            <button type="button" class="btn_close" id="btnHelpClose">
+                <span class="blind">닫기</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/inc/common/js/lua.js?r=20220411"></script>
+<script type="text/javascript" src="/inc/common/js/jquery.min.js"></script>
+<script type="text/javascript" src="/inc/common/js/bvsd.1.3.9.js"></script>
+<script type="text/JavaScript">
+    //region define, setter
+    let idFlag = false;
+    let pwFlag = false;
+    let authFlag = false;
+    let resendCount = 0;
+
+    let properties = {
+        keyboard: [{id:"id"}, {id:"pswd1", secureMode:true}, {id:"phoneNo", secureMode:true}],
+        modeProperties: {
+            mode: 4
+        }
+    };
+    let desk = new sofa.Koop(properties);
+
+    $(document).ready(function() {
+        defaultScript();
+
+        modeIdentity();
+        $("#join_toggle").prop("checked",true);
+
+    });
+
+    function defaultScript() {
+
+        $("#join_toggle").change(function() {
+            if($("#join_toggle").is(":checked")) {
+                nclk(this,'BTN.ONrealNm','','','');
+                modeIdentity();
+            } else {
+                nclk(this,'BTN.OFFrealNm','','','');
+                modeOccupancy();
+            }
+        });
+
+        $("#id").blur(function() {
+            idFlag = false;
+            checkId();
+        });
+
+        $("#pswd1").blur(function() {
+            pwFlag = false;
+            checkPswd1();
+            setTimeout('checkPswd1()',1200);
+        });
+
+        $("#email").blur(function() {
+            checkEmail();
+        });
+
+        $("#name").blur(function() {
+            checkName();
+        });
+
+        $("#birthdayInput").blur(function() {
+            checkBirthday();
+        });
+
+        $("#phoneNo").blur(function() {
+            checkPhoneNo();
+        });
+
+        $("#phoneNo").focusin(function() {
+            let obj = $("#btn_telecom");
+            obj.attr("aria-expanded", "false");
+            obj.parents(".form_item.telecom").removeClass("focus");
+        });
+
+        // 인증 정보가 수정되면 인증 상태를 취소 - begin
+        $("#name").change(function() {
+            let joinMode = $("#joinMode").val();
+            if(joinMode == "joinIdentity") {
+                cancelAuthFlag();
+            }
+        });
+
+        $("#birthdayInput").change(function() {
+            let joinMode = $("#joinMode").val();
+            if(joinMode == "joinIdentity") {
+                cancelAuthFlag();
+            }
+        });
+
+        $("input[name='identityGender']:radio").change(function () {
+            cancelAuthFlag();
+        });
+
+        $("input[name='foreigner']:radio").change(function () {
+            cancelAuthFlag();
+        });
+
+        $("#phoneNo").change(function() {
+            cancelAuthFlag();
+        });
+
+        $("#nationNo").change(function() {
+            cancelAuthFlag();
+        });
+        // 인증 정보가 수정되면 인증 상태를 취소 - end
+
+        $("#btnSend").click(function() {
+            resendCount = 0;
+            checkAndSendSMS();
+        });
+
+        $("#authNo6").blur(function() {
+            checkAuthNo6();
+        });
+
+        $("#authNo4").blur(function() {
+            checkAuthNo4();
+        });
+
+        $("#btnJoin").click(function() {
+            submitClose();
+            if(idFlag && pwFlag && authFlag) {
+                mainSubmit();
+            } else {
+                setTimeout(function() {
+                    mainSubmit();
+                }, 900);
+            }
+        });
+
+        $("#btnJuniver").click(function() {
+            mainSubmit();
+            return false;
+        });
+
+        $("#agree_all").click(function() {
+            setTerms();
+        })
+        $("#agree_01").click(function() {
+            viewTerms();
+        })
+        $("#agree_02").click(function() {
+            viewTerms();
+        })
+        $("#agree_03").click(function() {
+            viewTerms();
+        })
+        $("#agree_04").click(function() {
+            viewTerms();
+        })
+        $("#agree_05").click(function() {
+            viewTerms();
+        })
+
+        $("#btnTelecom1").click(function() {
+            setTelecom("SKT");
+        })
+        $("#btnTelecom2").click(function() {
+            setTelecom("SKR");
+        })
+        $("#btnTelecom3").click(function() {
+            setTelecom("KTF");
+        })
+        $("#btnTelecom4").click(function() {
+            setTelecom("KTR");
+        })
+        $("#btnTelecom5").click(function() {
+            setTelecom("LGT");
+        })
+        $("#btnTelecom6").click(function() {
+            setTelecom("LGR");
+        })
+
+        $("#identityGender1").click(function() {
+            checkGenderIdentity();
+        })
+        $("#identityGender2").click(function() {
+            checkGenderIdentity();
+        })
+        $("#foreigner1").click(function() {
+            checkForeigner();
+        })
+        $("#foreigner2").click(function() {
+            checkForeigner();
+        })
+
+        $("#gender1").click(function() {
+            checkGenderOccupancy();
+        })
+        $("#gender2").click(function() {
+            checkGenderOccupancy();
+        })
+        $("#gender3").click(function() {
+            checkGenderOccupancy();
+        })
+
+        $("#resendIdentity").click(function() {
+            resendCount++;
+            if(resendCount >= 3) {
+                btnHelpDiv()
+            }
+            checkAndSendSMS();
+        })
+        $("#resendOccupancy").click(function() {
+            resendCount++;
+            if(resendCount >= 3) {
+                btnHelpDiv()
+            }
+            checkAndSendSMS();
+        })
+
+        $("#btnClose").click(function() {
+            $("#divPopup").hide();
+        })
+        $("#btnLogin").click(function() {
+            location.replace("https://nid.naver.com/nidlogin.login");
+        })
+
+        $(".form_item .input").focus(function() {
+            if ($(this).prop("readonly")) return;
+            $(this).parents(".form_item").addClass("focus");
+        }).blur(function() {
+            $(this).parents(".form_item").removeClass("focus");
+        })
+
+        $(".form_item .input").on("propertychange change keyup paste input", function() {
+            if ($(this).val().length === 0 ) {
+                $(this).parents(".form_item").removeClass("on");
+            } else {
+                $(this).parents(".form_item").addClass("on");
+            }
+        })
+
+        $(".btn_show").click(function() {
+            if ($(this).hasClass("hide")) {
+                $(this).removeClass("hide");
+                $(this).children(".blind").text("비밀번호 숨기기");
+                $(this).parents(".form_item").children(".input").attr("type", "text");
+            } else {
+                $(this).addClass("hide");
+                $(this).children(".blind").text("비밀번호 보기");
+                $(this).parents(".form_item").children(".input").attr("type", "password");
+            }
+        })
+
+        $(".btn_telecom").click(function(e) {
+            e.stopPropagation();
+            if ($(this).attr("aria-expanded") === "true") {
+                $(this).attr("aria-expanded", "false");
+                $(this).parents(".form_item.telecom").removeClass("focus");
+            } else {
+                $(this).attr("aria-expanded", "true");
+                $(this).parents(".form_item.telecom").addClass("focus");
+            }
+        })
+
+        $(".telecom_menu .button").click(function() {
+            let selectedText = `<span class="blind">통신사 선택</span>` + $(this).children(".text").text();
+            $(this).parents(".form_item.telecom").addClass("on");
+            $(this).parents(".form_item.telecom").children(".btn_telecom").html(selectedText);
+            $(this).parents(".form_item.telecom").children(".btn_telecom").attr("aria-expanded", "false");
+            $(this).parents(".form_item.telecom").children(".btn_telecom").parents(".form_item.telecom").removeClass("focus");
+        })
+
+        $(".check_box .btn_expand").click(function() {
+            if ($(this).attr("aria-expanded") == "true") {
+                $(this).attr("aria-expanded", "false");
+                $(this).parents(".check_box").children(".check_list").removeClass("on");
+            } else {
+                $(this).attr("aria-expanded", "true");
+                $(this).parents(".check_box").children(".check_list").addClass("on");
+            }
+        })
+
+        $(".help_modal .btn_expand").click(function() {
+            if ($(this).attr("aria-expanded") === "true") {
+                $(this).attr("aria-expanded", "false");
+                $(this).parents(".item").removeClass("on");
+                return;
+            }
+            $(this).parents(".help_list").find(".btn_expand").each(function(index, item) {
+                $(item).attr("aria-expanded", "false");
+                $(item).parents(".item").removeClass("on");
+            })
+            $(this).attr("aria-expanded", "true");
+            $(this).parents(".item").addClass("on");
+        })
+
+        $("#btnHelpClose").click(function() {
+            closeHelpModal();
+        })
+
+        $(".handle").on("mousedown", function() {
+            $(".help_modal_wrap").addClass("dragging");
+        })
+
+        $(".handle").on("touchstart", function() {
+            $(".help_modal_wrap").addClass("dragging");
+        })
+
+        $(window).on("mousemove", function(e) {
+            hanleDrag(false, e);
+        })
+
+        $(window).on("touchmove", function(e) {
+            hanleDrag(true, e);
+        })
+
+        $(window).on("mouseup", function() {
+            handleDragEnd();
+        })
+
+        $(window).on("touchend", function() {
+            handleDragEnd();
+        })
+    }
+
+    function closeHelpModal() {
+        $("body").removeClass("fixed");
+        $(".dimlayer.help_modal_style").css({display: "none"});
+        $(".container").css({transform: "translateY(0)"});
+    }
+
+    function hanleDrag(isMobile, e) {
+        if (!$(".help_modal_wrap").hasClass("dragging")) return;
+        let clientY = isMobile ? e.originalEvent.touches[0].clientY : e.clientY;
+        let yValue = Math.max(0, clientY - $(window).height() - 14 + Math.min($(window).height(), $(".help_modal").outerHeight()));
+        $(".help_modal").css("transform", "translateY(" + yValue + "px)");
+        $(".help_modal").data("translateY", yValue);
+    }
+    function handleDragEnd() {
+        if (!$(".help_modal_wrap").hasClass("dragging")) return;
+        $(".help_modal_wrap").removeClass("dragging");
+        let helpModal = $(".help_modal");
+        helpModal.css("transform", "");
+        if (helpModal.data("translateY") > Math.min($(window).height(), helpModal.outerHeight() / 2)) {
+            closeHelpModal();
+        }
+    }
+
+    function btnHelpDiv() {
+        $(".dimlayer.help_modal_style").css({display: "block"});
+
+        if (window.innerWidth < 1024) {
+            $(".container").css({transform: "translateY(-220px)"});
+            $("body").addClass("fixed");
+        }
+    }
+
+    function checkAndSendSMS() {
+        let joinMode = $("#joinMode").val();
+
+        if(joinMode == "joinIdentity") {
+            nclk(this,'input.sendRN','','','');
+            if (!checkIdentityInput()) {
+                return false;
+            }
+            sendSmsButtonIdentity();
+        } else if(joinMode == "joinOccupancy") {
+                nclk(this,'input.send','','','');
+            if (!checkOccupancyInput()) {
+                return false;
+            }
+            sendSmsButtonOccupancy();
+        } else {
+            return false;
+        }
+
+        $("#divBtnAuth").hide();
+        $("#divBtnJoin").show();
+        return false;
+    }
+
+    function hideAllErrorMessage() {
+        $("#nameMsg").hide();
+        $("#birthdayMsg").hide();
+        $("#telecomMsg").hide();
+        $("#genderMsg").hide();
+        $("#foreignerMsg").hide();
+        $("#phoneNoMsg").hide();
+        $("#termAgreeMsg").hide();
+        $("#authNoMsg").hide();
+    }
+
+    function hideJuniverErrorMessage() {
+        $("#telecomMsg").hide();
+        $("#foreignerMsg").hide();
+        $("#phoneNoMsg").hide();
+        $("#termAgreeMsg").hide();
+        $("#authNoMsg").hide();
+    }
+
+    function modeIdentity() {
+        $("#divTelecom").show();
+        $("#divIdentityGender").show();
+        $("#divTerm").show();
+
+        $("#divGender").hide();
+        $("#divGender").css("border-radius", "");
+
+        $("#divNationNo").hide();
+
+        $("#divPhoneNo").show();
+
+        $("#divAuthNo6").hide();
+        $("#divAuthNo4").hide();
+
+        $("#divBtnAuth").show();
+        $("#divBtnJoin").hide();
+        $("#divBtnJuniver").hide();
+
+        hideAllErrorMessage();
+        $("#divToggle").show();
+
+        $("#joinMode").val("joinIdentity");
+        authFlag = false;
+    }
+
+    function modeOccupancy() {
+        $("#divTelecom").hide();
+        $("#divIdentityGender").hide();
+        $("#divTerm").hide();
+
+        $("#divGender").show();
+        $("#divGender").css("border-radius", "");
+
+        $("#divNationNo").show();
+        $("#divPhoneNo").show();
+
+        $("#divAuthNo6").hide();
+        $("#divAuthNo4").hide();
+
+        $("#divBtnAuth").show();
+        $("#divBtnJoin").hide();
+        $("#divBtnJuniver").hide();
+
+        hideAllErrorMessage();
+        $("#divToggle").show();
+
+        $("#joinMode").val("joinOccupancy");
+        authFlag = false;
+    }
+
+    function modeJuniver() {
+        $("#divTelecom").hide();
+        $("#divIdentityGender").hide();
+        $("#divTerm").hide();
+
+        $("#divGender").show();
+        $("#divGender").css("border-radius", "0 0 6px 6px");
+
+        $("#divNationNo").hide();
+        $("#divPhoneNo").hide();
+
+        $("#divAuthNo6").hide();
+        $("#divAuthNo4").hide();
+
+        $("#divBtnAuth").hide();
+        $("#divBtnJoin").hide();
+        $("#divBtnJuniver").show();
+
+        hideJuniverErrorMessage();
+        $("#divToggle").hide();
+        $("#realNameTitle").hide();
+
+        $("#joinMode").val("joinJuniver");
+        authFlag = false;
+    }
+
+    function cancelAuthFlag() {
+        authFlag = false;
+        $("#divToggle").show();
+        $("#divAuthNo6").hide();
+        $("#divAuthNo4").hide();
+        $("#authNoMsg").hide();
+
+        $("#divBtnJoin").hide();
+        $("#divBtnAuth").show();
+    }
+
+    function submitClose() {
+        $("#btnJoin").attr("disabled",true);
+    }
+
+    function submitOpen() {
+        $("#btnJoin").attr("disabled",false);
+    }
+
+    function mainSubmit() {
+        let joinMode = $("#joinMode").val();
+
+        if(joinMode == "joinIdentity") {
+            nclk(this,'BTN.signupRN','','','');
+            if (!checkIdentityInput()
+                || !checkAuthNo6()
+            ) {
+                submitOpen();
+                return false;
+            }
+        } else if(joinMode == "joinOccupancy") {
+                nclk(this,'BTN.signup','','','');
+            if (!checkOccupancyInput()
+                || !checkAuthNo4()
+            ) {
+                submitOpen();
+                return false;
+            }
+        } else {
+            nclk(this,'BTN.prntsAgr','','','');
+            if (!checkJuniverInput()) {
+                submitOpen();
+                return false;
+            }
+            $("#join_form").attr("action", "/user2/join/prtsBegin");
+
+            if(idFlag && pwFlag) {
+                submitClose();
+                try {
+                    desk.f(function(a) {
+                        $("#nid_kb2").val(a);
+                        $("#join_form").submit();
+                    });
+                } catch (e) {
+                    $("#nid_kb2").val("join v2 error: " + e.name + ", " + e.message);
+                    $("#join_form").submit();
+                }
+            } else {
+                submitOpen();
+                return false;
+            }
+        }
+
+        if(idFlag && pwFlag && authFlag) {
+            try {
+                desk.f(function(a) {
+                    $("#nid_kb2").val(a);
+                    $("#join_form").submit();
+                });
+            } catch (e) {
+                $("#nid_kb2").val("join v2 error: " + e.name + ", " + e.message);
+                $("#join_form").submit();
+            }
+            submitClose();
+        } else {
+            submitOpen();
+            return false;
+        }
+    }
+
+    function checkIdentityInput() {
+        if (checkId()
+            & checkPswd1()
+            & checkEmail()
+            & checkName()
+            & checkBirthday()
+            & checkTelecom()
+            & checkForeigner()
+            & checkGenderIdentity()
+            & checkPhoneNo()
+            & checkAgree()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkOccupancyInput() {
+        if (checkId()
+            & checkPswd1()
+            & checkEmail()
+            & checkName()
+            & checkBirthday()
+            & checkGenderOccupancy()
+            & checkPhoneNo()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkJuniverInput() {
+        if (checkId()
+            & checkPswd1()
+            & checkEmail()
+            & checkName()
+            & checkBirthday()
+            & checkGenderOccupancy()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkAgree() {
+        var oMsg = $("#termAgreeMsg");
+        let oDiv = $("#itemAgree");
+        if (!$("#agree_all").is(":checked")) {
+            showClearErrorMsg(oMsg, "필수 약관에 모두 동의해 주세요.");
+            oDiv.addClass("error");
+            cancelAuthFlag();
+            return false;
+        }
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        return true;
+    }
+
+    function setTerms() {
+        if ($("#agree_all").is(":checked")) {
+            $("#agree_01").prop("checked",true);
+            $("#agree_02").prop("checked",true);
+            $("#agree_03").prop("checked",true);
+            $("#agree_04").prop("checked",true);
+            $("#agree_05").prop("checked",true);
+        } else {
+            $("#agree_01").prop("checked",false);
+            $("#agree_02").prop("checked",false);
+            $("#agree_03").prop("checked",false);
+            $("#agree_04").prop("checked",false);
+            $("#agree_05").prop("checked",false);
+        }
+        checkAgree();
+        return true;
+    }
+
+    function viewTerms() {
+        if( !$("#agree_01").is(":checked")
+            || !$("#agree_02").is(":checked")
+            || !$("#agree_03").is(":checked")
+            || !$("#agree_04").is(":checked")
+            || !$("#agree_05").is(":checked")) {
+            $("#agree_all").prop("checked",false);
+        }
+        if( $("#agree_01").is(":checked")
+            && $("#agree_02").is(":checked")
+            && $("#agree_03").is(":checked")
+            && $("#agree_04").is(":checked")
+            && $("#agree_05").is(":checked")) {
+            $("#agree_all").prop("checked",true);
+        }
+        checkAgree();
+        return true;
+    }
+
+    function showErrorMsg(obj, msg) {
+        obj.attr("class", "error_text item_style");
+        obj.html(msg);
+        obj.show();
+    }
+
+    function showSuccessMsg(obj, msg) {
+        obj.attr("class", "notice_text item_style");
+        obj.html(msg);
+        obj.show();
+    }
+
+    function showClearErrorMsg(obj, msg) {
+        obj.attr("class", "error_text");
+        obj.html(msg);
+        obj.show();
+    }
+
+    function showClearSuccessMsg(obj, msg) {
+        obj.attr("class", "notice_text");
+        obj.html(msg);
+        obj.show();
+    }
+
+    function hideMsg(obj) {
+        obj.hide();
+    }
+
+    function checkId() {
+        let id = $("#id").val();
+        let oMsg = $("#idMsg");
+        let oDiv = $("#divId");
+
+        if(idFlag) {
+            oMsg.hide();
+            return true;
+        }
+
+        if ( id == "") {
+            showErrorMsg(oMsg,"아이디: 필수 정보입니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        let isID = /^[a-z0-9][a-z0-9_\-]{4,19}$/;
+        if (!isID.test(id)) {
+            showErrorMsg(oMsg,"아이디: 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        idFlag = false;
+        let key = $("#token_sjoin").val();
+
+        $.ajax({
+            type:"GET",
+            url: "/user2/joinAjax?m=checkId&id=" + id + "&key=" + key,
+            success : function(data) {
+                let result = data.substr(4);
+
+                if (result == "Y") {
+                    idFlag = true;
+                    oMsg.hide();
+                    oDiv.removeClass("error");
+                } else {
+                    showErrorMsg(oMsg, "아이디: 사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.");
+                    oDiv.addClass("error");
+                }
+            }
+        });
+        return true;
+    }
+
+    function checkPswd1() {
+        let id = $("#id").val();
+        let pw = $("#pswd1").val();
+        let oMsg = $("#pswd1Msg");
+        let oDiv = $("#divPasswd");
+        let oLevel = $("#secureLevel");
+
+        if(pwFlag) {
+            oMsg.hide();
+            oDiv.removeClass("error");
+            return true;
+        }
+
+        if (pw == "") {
+            showErrorMsg(oMsg,"비밀번호: 필수 정보입니다.");
+            oDiv.addClass("error");
+            oLevel.attr("class", "how_secure");
+            oLevel.html("")
+            return false;
+        }
+        if (isValidPasswd(pw) != true) {
+            showErrorMsg(oMsg,"비밀번호: 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.");
+            oDiv.addClass("error");
+            oLevel.attr("class", "how_secure on dangerous");
+            oLevel.html("사용불가")
+            return false;
+        }
+
+        pwFlag = false;
+        $.ajax({
+            type:"POST",
+            url: "/user2/joinAjax?m=checkPswd",
+            data: {
+                "id": id,
+                "pw": pw
+            },
+            success : function(data) {
+                let result = data.substr(4);
+                if (result == 4) {
+                    oLevel.attr("class", "how_secure on safe");
+                    oLevel.html("안전")
+                } else if (result == 3) {
+                    oLevel.attr("class", "how_secure on");
+                    oLevel.html("보통")
+                } else if (result == 2) {
+                    oLevel.attr("class", "how_secure on dangerous");
+                    oLevel.html("위험")
+                } else {    // 1 or else
+                    oLevel.attr("class", "how_secure on dangerous");
+                    oLevel.html("사용불가")
+                    return false;
+                }
+                oMsg.hide();
+                oDiv.removeClass("error");
+                pwFlag = true;
+                createRsaKey();
+            }
+        });
+        return true;
+    }
+
+    function checkSpace(str) {
+        if (str.search(/\s/) != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getLenChar(texts) {
+        texts = texts + '';
+        return String.fromCharCode(texts.length);
+    }
+
+    function createRsaKey() {
+        let rsa = new RSAKey();
+        let sessionKey = "hmTGaIwhTl4j3wQ4";
+        let keyName = "100019846";
+        let eValue = "a253b9b0a98bf27a2a7c37ba7753d4d835c3882ca554719d8e81cfe549f915659e3b8bd65f357f73326b6690882d8aefb955a715d07d020568d8edc81fd37f62caceda9c4d79e1bbb7e1232db7d4a192d044a279fe8360d6dd81cd65ca5fbb4472b8b7b70a526bc7a057e9470219fe86a896958ce256a8a8872e5fc636ed4703";
+        let nValue = "010001";
+
+        let id = $("#id").val();
+        let pw = $("#pswd1").val();
+        rsa.setPublic(eValue, nValue);
+
+        let comVal = getLenChar(sessionKey) + sessionKey + getLenChar(id) + id;
+        $("#encPswd").val(rsa.encrypt(comVal + getLenChar(pw) + pw));
+        $("#encKey").val(keyName);
+    }
+
+    function isValidPasswd(str) {
+        let cnt = 0;
+        if (str == "") {
+            return false;
+        }
+
+        /* check whether input value is included space or not */
+        let retVal = checkSpace(str);
+        if (retVal) {
+            return false;
+        }
+        if (str.length < 8) {
+            return false;
+        }
+        for (let i = 0; i < str.length; ++i) {
+            if (str.charAt(0) == str.substring(i, i + 1))
+                ++cnt;
+        }
+        if (cnt == str.length) {
+            return false;
+        }
+
+        let isPW = /^[A-Za-z0-9`\-=\\\[\];',\./~!@#\$%\^&\*\(\)_\+|\{\}:"<>\?]{8,16}$/;
+        if (!isPW.test(str)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkEmail() {
+        let id = $("#id").val();
+        let email = $("#email").val();
+        let oMsg = $("#emailMsg");
+        let oDiv = $("#divEmail");
+
+        if (email == "") {
+            hideMsg(oMsg);
+            oDiv.removeClass("error");
+            return true;
+        }
+
+        let isEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let isHan = /[ㄱ-ㅎ가-힣]/g;
+        if (!isEmail.test(email) || isHan.test(email)) {
+            showErrorMsg(oMsg,"이메일: 이메일 주소가 정확한지 확인해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        }
+        if (email == id + "@naver.com") {
+            showErrorMsg(oMsg,"이메일: 가입중인 아이디는 사용하실 수 없습니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        return true;
+    }
+
+    function checkName() {
+        let oMsg = $("#nameMsg");
+        let nonchar;
+
+        nonchar = /[^가-힣a-zA-Z0-9]/gi;
+
+        let name = $("#name").val();
+        let oDiv = $("#divName");
+        if (name == "") {
+            showErrorMsg(oMsg,"이름: 필수 정보입니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+        if (name != "" && nonchar.test(name)) {
+            showErrorMsg(oMsg,"이름: 한글, 영문 대/소문자를 사용해 주세요. (특수기호, 공백 사용 불가)");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        return true;
+    }
+
+    function YMDFormatter(num){
+        if(!num) return "";
+        let formatNum = '';
+
+        try{
+            if(num.length == 8) {
+                formatNum = num.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3');
+            }
+        } catch(e) {
+            formatNum = num;
+        }
+        return formatNum;
+    }
+
+    function checkBirthday() {
+        let joinMode = $("#joinMode").val();
+        let birthday = $("#birthdayInput").val();
+        let oMsg = $("#birthdayMsg");
+        let oDiv = $("#divBirthday");
+
+        if (birthday == "") {
+            showErrorMsg(oMsg,"생년월일: 필수 정보입니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        birthday = birthday.replace(/ /gi, "").replace(/\./gi, "");
+        if (birthday.length != 8) {
+            showErrorMsg(oMsg,"생년월일: 생년월일은 8자리 숫자로 입력해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        }
+        if (!isValidDate(birthday)) {
+            showErrorMsg(oMsg,"생년월일: 생년월일이 정확한지 확인해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        }
+        $("#birthdayInput").val(YMDFormatter(birthday));
+        $("#birthday").val(birthday);
+
+        let age = calcAge(birthday);
+        if (age < 0) {
+            showErrorMsg(oMsg,"생년월일: 생년월일이 정확한지 확인해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        } else if (age >= 110) {
+            showErrorMsg(oMsg,"생년월일: 생년월일이 정확한지 확인해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        } else if (age < 14) {
+
+            modeJuniver();
+            showSuccessMsg(oMsg,"생년월일: 만 14세 미만의 어린이는 보호자의 동의가 필요합니다.");
+            oDiv.removeClass("error");
+            $("#authNoMsg").hide();
+            return true;
+
+        } else {
+            hideMsg(oMsg);
+            oDiv.removeClass("error");
+            $("#authNoMsg").hide();
+
+            if(joinMode == "joinJuniver") {
+                    modeIdentity();
+                    $("#realNameTitle").show();
+            }
+            return true;
+        }
+    }
+
+    function setTelecom(code) {
+        let oldTelecom = $("#telecom").val();
+        if(oldTelecom != code) {
+            cancelAuthFlag();
+        }
+
+        $("#telecom").val(code);
+        checkTelecom();
+    }
+
+    function checkTelecom() {
+        let telecom = $("#telecom").val();
+        let oMsg = $("#telecomMsg");
+        let oDiv = $("#divTelecom");
+
+        if (telecom == "") {
+            showErrorMsg(oMsg,"통신사: 이용하는 통신사를 선택해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        return true;
+    }
+
+    function checkGenderIdentity() {
+        let oMsg = $("#genderMsg");
+        let oDiv = $("#divIdentityGender");
+        let oList = $("#listIdentityGender");
+
+        if( !$("#identityGender1").is(":checked")
+            && !$("#identityGender2").is(":checked")
+        ) {
+            showErrorMsg(oMsg,"성별: 성별을 선택해 주세요.");
+            oDiv.addClass("error");
+            oList.addClass("error");
+            return false;
+        }
+
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        oList.removeClass("error");
+        return true;
+    }
+
+    function checkForeigner() {
+        let oMsg = $("#foreignerMsg");
+        let oDiv = $("#divIdentityGender");
+        let oList = $("#listForeigner");
+
+        if( !$("#foreigner1").is(":checked")
+            && !$("#foreigner2").is(":checked")
+        ) {
+            showErrorMsg(oMsg,"내/외국인: 내/외국인 중 선택해 주세요.");
+            oDiv.addClass("error");
+            oList.addClass("error");
+            return false;
+        }
+
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        oList.removeClass("error");
+        return true;
+    }
+
+    function checkGenderOccupancy() {
+        let oMsg = $("#genderMsg");
+        let oDiv = $("#divGender");
+        let oList = $("#listGender");
+
+        if( !$("#gender1").is(":checked")
+            && !$("#gender2").is(":checked")
+            && !$("#gender3").is(":checked")
+        ) {
+            showErrorMsg(oMsg,"성별: 성별을 선택해 주세요.");
+            oDiv.addClass("error");
+            oList.addClass("error");
+            return false;
+        }
+
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        oList.removeClass("error");
+        return true;
+    }
+
+    function PhoneNoFormatter(num){
+        if(!num) return "";
+        let formatNum = '';
+
+        try{
+            if(num.length == 10) {
+                formatNum = num.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else if(num.length == 11) {
+                formatNum = num.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+            } else {
+                formatNum = num;
+            }
+        } catch(e) {
+            formatNum = num;
+        }
+        return formatNum;
+    }
+
+    function checkPhoneNo() {
+        let nationNo = $("#nationNo").val();
+        let phoneNo = $("#phoneNo").val();
+        let oMsg = $("#phoneNoMsg");
+        let oDiv = $("#divPhoneNo");
+
+        if (phoneNo == "") {
+            showErrorMsg(oMsg,"휴대전화번호: 필수 정보입니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        phoneNo = phoneNo.replace(/ /gi, "").replace(/-/gi, "");
+        if(nationNo == "82" && !isCellPhone(phoneNo)) {
+            showErrorMsg(oMsg,"휴대전화번호: 휴대전화번호가 정확한지 확인해 주세요.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        if(nationNo == "82") {
+            $("#phoneNo").val(PhoneNoFormatter(phoneNo));
+        } else {
+            $("#phoneNo").val(phoneNo);
+        }
+        hideMsg(oMsg);
+        oDiv.removeClass("error");
+        return true;
+    }
+
+    function sendSmsButtonIdentity() {
+        let name = $("#name").val();
+        let foreign;
+        if( $("input[name='foreigner']:checked").val() == "K") {
+            foreign = "N";
+        } else {
+            foreign = "Y";
+        }
+        let identityGender;
+        if( $("input[name='identityGender']:checked").val() == "M") {
+            identityGender = "M";
+        } else {
+            identityGender = "F";
+        }
+        let birthday = $("#birthday").val();
+        let telecom = $("#telecom").val();
+        let phoneNo = $("#phoneNo").val();
+        let key = $("#token_sjoin").val();
+        let oMsg = $("#authNoMsg");
+        phoneNo = phoneNo.replace(/ /gi, "").replace(/-/gi, "");
+
+        authFlag = false;
+        $.ajax({
+            type:"GET",
+            url: "/user2/joinAjax?m=sendIdentityAuthno&sex=" + identityGender + "&foreign=" + foreign
+                + "&birthday=" + birthday + "&telecom=" + telecom
+                + "&mobno=" + phoneNo
+                + "&key=" + key + "&nm=" + escape(encodeURIComponent(name)) ,
+            success : function() {
+                showClearSuccessMsg(oMsg,"인증번호를 발송했습니다. 인증 문자가 오지 않으면 <button type='button' class='btn_help' onClick='btnHelpDiv()'>도움말</button>을 확인해 보세요.");
+                $("#divAuthNo6").show();
+                $("#divToggle").hide();
+                $("#authNo6").val("");
+            }
+        });
+        return false;
+    }
+
+    function sendSmsButtonOccupancy() {
+        let nationNo = $("#nationNo").val();
+        let phoneNo = $("#phoneNo").val();
+        let key = $("#token_sjoin").val();
+        let oMsg = $("#authNoMsg");
+        let lang = "ko_KR";
+        let id = $("#id").val();
+        phoneNo = phoneNo.replace(/ /gi, "").replace(/-/gi, "");
+
+        try {
+            desk.f(function(a) {
+                $("#nid_kb2").val(a);
+            });
+        } catch (e) {
+            $("#nid_kb2").val("join v2 error: " + e.name + ", " + e.message);
+        }
+        let nid_kb2 = $("#nid_kb2").val();
+
+        authFlag = false;
+        $.ajax({
+            type:"POST",
+            data:{"nid_kb2":nid_kb2},
+            url: "/user2/joinAjax?m=sendAuthno&tp=normal&nationNo=" + nationNo + "&mobno=" + phoneNo + "&lang=" + lang + "&key=" + key + "&id=" + id,
+            success : function(data) {
+                let result = data.substr(4);
+                if (result == "S") {
+                    showClearSuccessMsg(oMsg,"인증번호를 발송했습니다. 인증 문자가 오지 않으면 <button type='button' class='btn_help' onClick='btnHelpDiv()'>도움말</button>을 확인해 보세요.");
+                } else {
+                    showClearErrorMsg(oMsg,"휴대전화번호: 휴대전화번호가 정확한지 확인해 주세요.");
+                }
+                $("#divAuthNo4").show();
+                $("#divToggle").hide();
+                $("#authNo4").val("");
+            }
+        });
+        return true;
+    }
+
+    function checkAuthNo6() {
+        let authNo6 = $("#authNo6").val();
+        let oMsg = $("#authNoMsg");
+        let oDiv = $("#divAuthNo6");
+
+        if (authNo6 == "") {
+            showClearErrorMsg(oMsg,"인증이 필요합니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        if(authFlag) {
+            showClearSuccessMsg(oMsg,"인증이 성공했습니다.");
+            oDiv.removeClass("error");
+            return true;
+        } else {
+            checkAuthnoByAjax6();
+        }
+        return true;
+    }
+
+    function checkAuthNo4() {
+        let authNo = $("#authNo4").val();
+        let oMsg = $("#authNoMsg");
+        let oDiv = $("#divAuthNo4");
+
+        if (authNo == "") {
+            showClearErrorMsg(oMsg,"인증이 필요합니다.");
+            oDiv.addClass("error");
+            return false;
+        }
+
+        if(authFlag) {
+            showSuccessMsg(oMsg,"인증이 성공했습니다.");
+            oDiv.removeClass("error");
+            return true;
+        } else {
+            checkAuthnoByAjax4();
+        }
+        return true;
+    }
+
+    function checkAuthnoByAjax6() {
+        let name = $("#name").val();
+        let foreign;
+        if( $("input[name='foreigner']:checked").val() == "K") {
+            foreign = "N";
+        } else {
+            foreign = "Y";
+        }
+        let identityGender;
+        if( $("input[name='identityGender']:checked").val() == "M") {
+            identityGender = "M";
+        } else {
+            identityGender = "F";
+        }
+        let birthday = $("#birthday").val();
+        let telecom = $("#telecom").val();
+        let phoneNo = $("#phoneNo").val();
+        let key = $("#token_sjoin").val();
+        let oMsg = $("#authNoMsg");
+        let oDiv = $("#divAuthNo6");
+        let authNo = $("#authNo6").val();
+        phoneNo = phoneNo.replace(/ /gi, "").replace(/-/gi, "");
+
+        $("#authNoMsg").hide();
+        $.ajax({
+            type:"GET",
+            url: "/user2/joinAjax?m=checkIdentityAuthno&sex=" + identityGender + "&foreign=" + foreign
+                + "&birthday=" + birthday + "&telecom=" + telecom
+                + "&mobno=" + phoneNo
+                + "&authno=" + authNo
+                + "&key=" + key + "&nm=" + escape(encodeURIComponent(name)) ,
+            success : function(data) {
+                const result = data.substr(4);
+                const words = result.split(',');
+                const rtnCode = words[0];
+                if (rtnCode == "S") {
+                    if(words.length == 1) {
+                        showClearSuccessMsg(oMsg,"인증이 성공했습니다.");
+                        $("#phoneNoMsg").hide();
+                        oDiv.removeClass("error");
+                        authFlag = true;
+                        submitOpen();
+                    } else {
+                        oMsg.hide();
+                        $("#phoneNoMsg").hide();
+
+                        let oPopup = $("#divPopup");
+                        let oList = $("#listPopup");
+
+                        if(words.length == 2 && words[1] == 'NO_ID') {
+                            oList.hide();
+                        } else {
+                            let html = "";
+                            for(let i=1; i< words.length; i++) {
+                                html = html + '<li class="id_item">'+words[i]+"</li>";
+                            }
+                            oList.show();
+                            oList.html(html);
+                        }
+                        oPopup.show();
+                    }
+                } else if (rtnCode == "Cnt") {
+                    showClearErrorMsg(oMsg,"인증을 다시 진행해주세요.");
+                    oDiv.addClass("error");
+                } else {
+                    showClearErrorMsg(oMsg,"인증번호를 정확하게 다시 입력해 주세요.");
+                    oDiv.addClass("error");
+                }
+            }
+        });
+        return true;
+    }
+
+    function checkAuthnoByAjax4() {
+        let authNo = $("#authNo4").val();
+        let key = $("#token_sjoin").val();
+        let oMsg = $("#authNoMsg");
+        let oDiv = $("#divAuthNo4");
+
+        $.ajax({
+            type:"GET",
+            url: "/user2/joinAjax?m=checkAuthno&authno=" + authNo + "&key=" + key ,
+            success : function(data) {
+                let result = data.substr(4);
+                if (result == "S") {
+                    showClearSuccessMsg(oMsg,"인증이 성공했습니다.");
+                    $("#phoneNoMsg").hide();
+                    oDiv.removeClass("error");
+                    authFlag = true;
+                    submitOpen();
+                } else if (result == "Cnt") {
+                    showClearErrorMsg(oMsg,"인증을 다시 진행해주세요.");
+                    oDiv.addClass("error");
+                } else {
+                    showClearErrorMsg(oMsg,"인증번호를 정확하게 다시 입력해 주세요.");
+                    oDiv.addClass("error");
+                }
+            }
+        });
+        return true;
+    }
+
+    function calcAge(birth) {
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1);
+        let day = date.getDate();
+        if (month < 10)
+            month = '0' + month;
+        if (day < 10)
+            day = '0' + day;
+        let monthDay = month + '' + day;
+
+        birth = birth.replace('-', '').replace('-', '');
+        let birthdayy = birth.substr(0, 4);
+        let birthdaymd = birth.substr(4, 4);
+
+        let age = monthDay < birthdaymd ? year - birthdayy - 1 : year - birthdayy;
+        return age;
+    }
+
+    function isValidDate(param) {
+        try {
+            param = param.replace(/-/g, '');
+
+            // 자리수가 맞지않을때
+            if (isNaN(param) || param.length != 8) {
+                return false;
+            }
+
+            let year = Number(param.substring(0, 4));
+            let month = Number(param.substring(4, 6));
+            let day = Number(param.substring(6, 8));
+
+            if (month < 1 || month > 12) {
+                return false;
+            }
+
+            let maxDaysInMonth = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+            let maxDay = maxDaysInMonth[month - 1];
+
+            // 윤년 체크
+            if (month == 2 && (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)) {
+                maxDay = 29;
+            }
+
+            if (day <= 0 || day > maxDay) {
+                return false;
+            }
+            return true;
+
+        } catch (err) {
+            return false;
+        }
+        ;
+    }
+
+    function isCellPhone(p) {
+        let regPhone = /^((01[1|6|7|8|9])[1-9][0-9]{6,7})$|(010[1-9][0-9]{7})$/;
+        return regPhone.test(p);
+    }
+
+</script>
+
+</body>

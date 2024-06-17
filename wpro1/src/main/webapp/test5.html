@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>* 게시판 글 쓰기 *</h2>
+<!-- 	<from action="border.jsp" name="frm" method="get"> -->
+ 	<form action="border.jsp" name="frm" method="post">
+ 	</form>
+	<table border="1">
+		<tr>
+			<td>이름 :</td>
+			<td><input type="text" name="writer"></td>
+		</tr>
+		<tr>
+			<td>제목 :</td>
+			<td><input type="text" name="subject" placeholder="제목을 주세요."></td>
+		</tr>
+		<tr>
+			<td>나이 :</td>
+			<td><input type="number" name="age" value="20"></td>
+		</tr>
+		<tr>
+			<td>이메일 :</td>
+			<td><input type="email" name="email"></td>
+		</tr>
+		<tr>
+			<td>글내용 :</td>
+			<td><textarea rows="10" cols="50" name="content"></textarea>
+		</tr>
+		<tr>
+		<td colspan="2" align="center">
+			<input type="submit" value="전 송">
+			<input type="reset" value="취 소">
+			
+		</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="홍길동">
+<meta name="subject/title" content="연습용 홈피">
+<meta name="date" content="2014-5-13">
+
+<!-- 검색 로봇에 의해 검색을 당할 자료를 적음 -->
+<meta name="keyword" content="html 정보 설명">
+<meta name="description" content="홈페이지 작성 정보">
+<!--
+<meta http-equiv="refresh" content="3; url='test1.html'">
+  -->
+<title>Insert title here</title>
+</head>
+<body>
+form tag : 사용자와 정보를 소통 할 수 있는 (상호작용이 가능) 태그
+<hr>
+<h2>개인 정보 입력 창</h2>
+<form action="#" name="frm" method="get">
+1. 이름 : <input type="text" id="ir" name="irum" size="10" maxlength="10" value="tom"><br>
+2. 아이디 : <input type="text" name="id"><br/>
+3. 비번 : <input type="password" name="pwd" value="123"><br/>
+4. 사진로딩 : <input type="file" name="fname"><br>
+5. 자기 소개 : <textarea rows="5" cols="60" name="my"></textarea>
+<br>
+6. 성별 : <input type="radio" name="gender" value="m">남자&nbsp;&nbsp;&nbsp;
+<input type="radio" name="gender" value="f" checked="checked">여자
+<br>
+7. 스포츠
+<input type="checkbox" name="sports" value="축구">축구&nbsp;&nbsp;&nbsp;
+<input type="checkbox" name="sports" value="야구">야구&nbsp;&nbsp;&nbsp;
+<input type="checkbox" name="sports" value="농구">농구<br>
+8. 교통 수단
+<select name="tr"> <!-- multiple="multiple" -->
+	<option value="도보"></option>
+	<option value="버스"></option>
+	<option value="전철"></option>
+</select>
+<br>
+9. 숨김
+<input type="hidden" name="hello" value="hi">
+<br><br><br>
+<input type="submit" value="전    송">
+
+
+
+
+</form>
+</body>
+</html>

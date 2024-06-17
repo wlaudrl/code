@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	table 태그 연습
+	<br>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>제목1</th>
+				<th>제목2</th>
+				<th>제목3</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>내용1</td>
+				<td>내용2</td>
+				<td>내용3</td>
+			</tr>
+			<tr>
+				<td>내용4</td>
+				<td>내용5</td>
+				<td>내용6</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<table border="2" bgcolor="yellow"
+		style="background-image: url('images/')">
+		<caption>상품자료</caption>
+		<tr bgcolor="red">
+			<td bgcolor="silver"><b>상 품 명</b></td>
+			<td>수량</td>
+			<td>단가</td>
+		</tr>
+		<tr>
+			<td>컴퓨터</td>
+			<td align="center">2</td>
+			<td><img src="image/good1.jpeg" width="100"></td>
+		</tr>
+		<tr>
+			<td>
+				<table border="3">
+					<tr>
+						<td><a href="https://www.daum.net">daum</a></td>
+						<td>나</td>
+					</tr>
+				</table>
+			</td>
+			<td>c</td>
+		</tr>
+	</table>
+	<br>
+	<!-- 행 병합 row span, 열 병합 col span -->
+	<table border="1" width="200">
+		<tr>
+			<td colspan="2">a</td>
+			<td>b</td>
+			<td rowspan="2">c</td>
+		</tr>
+		<tr>
+			<td>d</td>
+			<td>e</td>
+			<td>f</td>
+		</tr>
+
+	</table>
+
+	<br>
+
+	<table border="1" width="200">
+		<tr>
+			<td rowspan="2">1</td>
+			<td colspan="3">2</td>
+			<td>3</td>
+		</tr>
+		<tr>
+
+			<td>4</td>
+			<td>10</td>
+		</tr>
+	</table>
+	<br>
+	<br> 한 화면에서 여러 개의 HTML문서를 보고자 할 경우 iframe 사용
+	<br>
+	<iframe src="test1.html" name="star" width="99%" height="300"></iframe>
+	<br />
+	<a href="test2.html" target="star">test2 보기(iframe 에서)</a>
+	<p />
+	이미지 맵 : 이미지를 여러 영역으로 지정해 각 영역마다 링크를 걸 수 있다
+	<br>
+	<img src="mage/good1.jpeg" width="150" usemap="#wind"/>
+	<map name="wind">
+		<area shape="rect" coords="0,0,50,50" href="https://www.naver.com">
+		<area shape="rect" coords="50,100,100,200" href="https://w3.org">
+		
+	</map>
+	<pre>
+		.
+		.
+		.
+		</pre>
+</body>
+</html>

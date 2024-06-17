@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>반복문 for</h2>
+	<script type="text/javascript">
+		for (let a = 1; a <= 5; a++) {
+			document.write(`a값은 ${a}<br>`);
+		}
+		// document.write(`for문을 벗어난 a값은 ${a}<br>`)
+
+		for (let a = (2 * 5); a <= 1; a -= 2) {
+			document.write(`a값은 ${a}<br>`);
+		}
+		document.write('<br>');
+
+		for (let a = 1; a <= 3; a++) {
+			document.write(`a값은 ${a}@nbsp;@nbsp;`);
+			for (let b = 1; b <= 4; b++) {
+				document.write(`b값은 ${a}@nbsp;@nbsp;`);
+			}
+			document.write('<br>');
+		}
+		document.write('<br>');
+		for (let a = 1; a <= 10; a++) {
+			if (a === 3)
+				continue;
+			if (a === 6)
+				break;
+			document.write(`a값은 ${a}`);
+		}
+	</script>
+
+	<h1>문제</h1>
+	<script type="text/javascript">
+		// 문1) 1 ~ 100 사이의 정수 중 3의 배수의 합과 갯수 출력
+
+		// 문2) 1 ~ 1000 사이의 정수 중 2의 배수이나 5의 배수가 아닌 수의 합 출력
+		// 조건 : 숫자가 100을 넘으면 작업 중지
+
+		// 문3) 2 ~ 9단 까지의 구구단 출력 (tablet tag 를 사용. border='1')
+		// 조건 : 각 단은 행으로 구분
+		// 조건 : 짝수 단은 노랑으로 배경 채움
+
+		let sum = 0;
+		let count = 0;
+
+		for (let i = 1; i <= 100; i++) {
+			if (i % 3 === 0) {
+				sum += i;
+				count++;
+			}
+		}
+
+		document.write("합은 : " + sum);
+		document.write("개수는: " + count);
+	</script>
+</body>
+</html>
