@@ -5,22 +5,20 @@
 <title>상품목록</title>
 </head>
 <body>
- <h2 class="shop_title">상품 목록</h2>
- <section class="shop">
-        <div class="shop_buttonContainer">
-            <button class="shop_basicBtn">상의</button>
-            <button class="shop_AbcBtn">하의</button>
-            <button class="shop_lowPriceBtn">신발</button>
-            <button class="shop_highPriceBtn">기타</button>
-        </div>
-        <br><br>
-        <select name="shop_selector" id="shop_selector">
-            <option>기본 정렬</option>
-            <option>낮은 가격순</option>
-            <option>높은 가격순</option>
-            <option>판매순</option>
-            <option>최신순</option>
-        </select>
- </section>
+	<h2>상품 목록</h2>
+	<table>
+		<tr>
+			<th class="menubar">전 체</th>
+			<th class="menubar">상 의</th>
+			<th class="menubar">하 의</th>
+			<th class="menubar">잡 화</th>
+		</tr>
+	</table>
+	<form action="hio2.jsp" name="frm" method="get">
+		<select name="stype">
+			<option value="title" selected="selected">글 제목</option>
+			<option value="name">작성자</option>
+		</select>
+	</form>
 </body>
 </html>
